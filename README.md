@@ -16,6 +16,5 @@ This extension contributes the following settings:
 ## Known Issues
 TODO
 
-## Release Notes
-### 0.0.1
-Initial release
+[## Release Notes](CHANGELOG.md)
+
