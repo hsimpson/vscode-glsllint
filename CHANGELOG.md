@@ -4,10 +4,11 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 ## [Unreleased]
+
+## [0.0.2]
 ### Added
 - Depends on the extension [Shader languages support for VS Code](https://marketplace.visualstudio.com/items?itemName=slevesque.shader)
 
-## [0.0.2]
 ### Changed
 - Fix: Linting when open a file
 

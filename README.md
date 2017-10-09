@@ -16,7 +16,7 @@ This extension contributes the following settings:
 * `glsllint.glslangValidatorPath`: The path to the glslangValidator executable
 
 ## Known Issues
-TODO
+Not yet published on Marketplace
 
 ## [Release Notes](CHANGELOG.md)
 
