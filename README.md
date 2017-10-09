@@ -3,10 +3,12 @@ This extension supports linting of GLS (OpenGL Shading Language).
 It uses the [OpenGL / OpenGL ES Reference Compiler](https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/)
 
 ## Features
-TODO
+- Linting GLSL Shader files
 
 ## Requirements
-TODO
+- Visual Studio Code 1.17.0
+- The [Shader languages support for VS Code](https://marketplace.visualstudio.com/items?itemName=slevesque.shader) extension
+- The [OpenGL / OpenGL ES Reference Compiler](https://www.khronos.org/opengles/sdk/tools/Reference-Compiler/)
 
 ## Extension Settings
 This extension contributes the following settings:
@@ -16,5 +18,5 @@ This extension contributes the following settings:
 ## Known Issues
 TODO
 
-[## Release Notes](CHANGELOG.md)
+## [Release Notes](CHANGELOG.md)
 
