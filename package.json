@@ -1,0 +1,58 @@
+{
+    "name": "vscode-glsllint",
+    "displayName": "GLSL Lint",
+    "description": "Linting of GLSL shader code",
+    "version": "0.0.3",
+    "publisher": "unknown",
+    "engines": {
+        "vscode": "^1.16.0"
+    },
+    "categories": [
+        "Languages",
+        "Linters"
+    ],
+    "extensionDependencies": [
+        "slevesque.shader"
+    ],
+    "activationEvents": [
+        "onLanguage:glsl"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "languages": [{
+            "id": "glsl",
+            "aliases": [
+                "GLSL"
+            ],
+            "extensions": [
+                ".vert",
+                ".frag"
+            ]
+        }],
+        "configuration": {
+            "type": "object",
+            "title": "GLSL Lint configuration",
+            "properties": {
+                "glsllint.glslangValidatorPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "The path to the glslangValidator executable"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "mocha": "^3.5.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}
