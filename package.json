@@ -37,7 +37,12 @@
                     "type": "string",
                     "default": "",
                     "description": "The path to the glslangValidator executable"
-                }
+                },
+				"glsllint.glslangValidatorArgs": {
+					"type": "string",
+					"default": "",
+					"description": "Arguments for the glslangValidator executable"
+				}
             }
         }
     },
