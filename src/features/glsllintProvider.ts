@@ -47,8 +47,11 @@ export default class GLSLLintingProvider implements vscode.CodeActionProvider {
 
     let decoded = ''
     let diagnostics: vscode.Diagnostic[] = [];
+    
+    // Split the arguments string from the settings
+    let args = config.glslangValidatorArgs.split(/\s+/).filter(arg => arg);
+    args.push(textDocument.fileName);
 
-    let args = [config.glslangValidatorArgs, textDocument.fileName];
     let options = vscode.workspace.rootPath ? {cwd: vscode.workspace.rootPath} :
                                               undefined;
 
