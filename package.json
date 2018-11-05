@@ -1,16 +1,26 @@
 {
     "name": "vscode-glsllint",
-    "displayName": "GLSL Lint",
-    "description": "Linting of GLSL shader code",
-    "version": "0.0.3",
-    "publisher": "unknown",
+    "version": "0.0.4",
+    "publisher": "CADENAS",
     "engines": {
         "vscode": "^1.16.0"
     },
+    "license": "MIT",
+    "displayName": "GLSL Lint",
+    "description": "Linting of GLSL shader code",
     "categories": [
-        "Languages",
+        "Programming Languages",
         "Linters"
     ],
+    "keywords": [
+        "GLSL",
+        "Vertex shader",
+        "Fragment shader",
+        "OpenGL",
+        "WebGL",
+        "OpenGL Shading Language"
+    ],
+    "icon": "icon.png",
     "extensionDependencies": [
         "slevesque.shader"
     ],
@@ -38,11 +48,11 @@
                     "default": "",
                     "description": "The path to the glslangValidator executable"
                 },
-				"glsllint.glslangValidatorArgs": {
-					"type": "string",
-					"default": "",
-					"description": "Arguments for the glslangValidator executable"
-				}
+                "glsllint.glslangValidatorArgs": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Arguments for the glslangValidator executable"
+                }
             }
         }
     },
