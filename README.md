@@ -14,6 +14,7 @@ It uses the [OpenGL / OpenGL ES Reference Compiler](https://www.khronos.org/open
 This extension contributes the following settings:
 
 * `glsllint.glslangValidatorPath`: The path to the glslangValidator executable
+* `glsllint.glslangValidatorArgs`: Arguments for the glslangValidator executable
 
 ## Known Issues
 Not yet published on Marketplace

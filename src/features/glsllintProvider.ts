@@ -47,8 +47,11 @@ export default class GLSLLintingProvider implements vscode.CodeActionProvider {
 
     let decoded = ''
     let diagnostics: vscode.Diagnostic[] = [];
+    
+    // Split the arguments string from the settings
+    let args = config.glslangValidatorArgs.split(/\s+/).filter(arg => arg);
+    args.push(textDocument.fileName);
 
-    let args = [textDocument.fileName];
     let options = vscode.workspace.rootPath ? {cwd: vscode.workspace.rootPath} :
                                               undefined;
 
@@ -71,7 +74,7 @@ export default class GLSLLintingProvider implements vscode.CodeActionProvider {
             }
 
             if (severity !== undefined) {
-              let matches = line.match(/WARNING:|ERROR:\s(\d*):(\d*): (\W.*)/);
+              let matches = line.match(/WARNING:|ERROR:\s.+?(?=:(\d)+):(\d*): (\W.*)/);
               if (matches && matches.length == 4) {
                 let message = matches[3];
                 let errorline = parseInt(matches[2]);
