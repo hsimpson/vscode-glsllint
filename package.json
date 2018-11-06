@@ -2,6 +2,10 @@
     "name": "vscode-glsllint",
     "version": "0.0.4",
     "publisher": "CADENAS",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cadenasgmbh/vscode-glsllint"
+    },
     "engines": {
         "vscode": "^1.16.0"
     },
@@ -29,16 +33,18 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "languages": [{
-            "id": "glsl",
-            "aliases": [
-                "GLSL"
-            ],
-            "extensions": [
-                ".vert",
-                ".frag"
-            ]
-        }],
+        "languages": [
+            {
+                "id": "glsl",
+                "aliases": [
+                    "GLSL"
+                ],
+                "extensions": [
+                    ".vert",
+                    ".frag"
+                ]
+            }
+        ],
         "configuration": {
             "type": "object",
             "title": "GLSL Lint configuration",
