@@ -1,79 +1,92 @@
 {
-    "name": "vscode-glsllint",
-    "version": "0.0.4",
-    "publisher": "CADENAS",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cadenasgmbh/vscode-glsllint"
-    },
-    "engines": {
-        "vscode": "^1.16.0"
-    },
-    "license": "MIT",
-    "displayName": "GLSL Lint",
-    "description": "Linting of GLSL shader code",
-    "categories": [
-        "Programming Languages",
-        "Linters"
-    ],
-    "keywords": [
-        "GLSL",
-        "Vertex shader",
-        "Fragment shader",
-        "OpenGL",
-        "WebGL",
-        "OpenGL Shading Language"
-    ],
-    "icon": "icon.png",
-    "extensionDependencies": [
-        "slevesque.shader"
-    ],
-    "activationEvents": [
-        "onLanguage:glsl"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "languages": [
-            {
-                "id": "glsl",
-                "aliases": [
-                    "GLSL"
-                ],
-                "extensions": [
-                    ".vert",
-                    ".frag"
-                ]
-            }
+  "name": "vscode-glsllint",
+  "version": "0.0.5",
+  "publisher": "CADENAS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cadenasgmbh/vscode-glsllint"
+  },
+  "engines": {
+    "vscode": "^1.16.0"
+  },
+  "license": "MIT",
+  "displayName": "GLSL Lint",
+  "description": "Linting of GLSL shader code",
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "GLSL",
+    "Vertex shader",
+    "Fragment shader",
+    "OpenGL",
+    "WebGL",
+    "OpenGL Shading Language"
+  ],
+  "icon": "icon.png",
+  "extensionDependencies": [
+    "slevesque.shader"
+  ],
+  "activationEvents": [
+    "onLanguage:glsl"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "glsl",
+        "aliases": [
+          "GLSL"
         ],
-        "configuration": {
-            "type": "object",
-            "title": "GLSL Lint configuration",
-            "properties": {
-                "glsllint.glslangValidatorPath": {
-                    "type": "string",
-                    "default": "",
-                    "description": "The path to the glslangValidator executable"
-                },
-                "glsllint.glslangValidatorArgs": {
-                    "type": "string",
-                    "default": "",
-                    "description": "Arguments for the glslangValidator executable"
-                }
-            }
+        "extensions": [
+          ".vert",
+          ".tesc",
+          ".tese",
+          ".geom",
+          ".frag",
+          ".comp",
+          ".rgen",
+          ".rint",
+          ".rahit",
+          ".rchit",
+          ".rmiss",
+          ".rcall",
+          ".mesh",
+          ".task"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "GLSL Lint configuration",
+      "properties": {
+        "glsllint.glslangValidatorPath": {
+          "type": "string",
+          "default": "",
+          "description": "The path to the glslangValidator executable"
+        },
+        "glsllint.glslangValidatorArgs": {
+          "type": "string",
+          "default": "",
+          "description": "Arguments for the glslangValidator executable"
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "mocha": "^5.2.0",
+    "prettier": "^1.16.1",
+    "typescript": "^3.2.4",
+    "vscode": "^1.1.28"
+  }
 }
