@@ -4,11 +4,18 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.5]
+
+### Added
+
+- Additional file extensions supported by glslangValidator (.vert, .tesc, .tese, .geom, .frag, .comp, .rgen, .rint, .rahit, .rchit, .rmiss, .rcall, .mesh, .task)
+- Error handling when a call to glslangValidator fails
+
 ## [0.0.4]
 
 ### Added
 
-- add Option glsllint.glslangValidatorArgs to control additional comand line args for glslangValidator
+- Option glsllint.glslangValidatorArgs to control additional comand line args for glslangValidator
 
 ## [0.0.3]
 
@@ -24,7 +31,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
-- Fix: Linting when open a file
+- Linting when open a file
 
 ## [0.0.1]
 
