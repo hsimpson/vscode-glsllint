@@ -1,4 +1,4 @@
-# GLSL Lint
+# GLSL Linting for Visual Studio Code
 
 This extension supports linting of GLS (OpenGL Shading Language).
 It uses the [OpenGL and OpenGL ES shader validator](https://github.com/KhronosGroup/glslang)
@@ -6,10 +6,11 @@ It uses the [OpenGL and OpenGL ES shader validator](https://github.com/KhronosGr
 ## Features
 
 - Linting GLSL Shader files
+- Supporting [glslify](https://github.com/glslify/glslify)
 
 ## Requirements
 
-- Visual Studio Code 1.17.0
+- Visual Studio Code 1.34.0
 - The [Shader languages support for VS Code](https://marketplace.visualstudio.com/items?itemName=slevesque.shader) extension
 - The [OpenGL and OpenGL ES shader validator](https://github.com/KhronosGroup/glslang)
 

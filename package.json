@@ -1,13 +1,13 @@
 {
   "name": "vscode-glsllint",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "CADENAS",
   "repository": {
     "type": "git",
     "url": "https://github.com/cadenasgmbh/vscode-glsllint"
   },
   "engines": {
-    "vscode": "^1.16.0"
+    "vscode": "^1.34.0"
   },
   "license": "MIT",
   "displayName": "GLSL Lint",
@@ -70,6 +70,11 @@
           "type": "string",
           "default": "",
           "description": "Arguments for the glslangValidator executable"
+        },
+        "glsllint.glslifyPattern": {
+          "type": "string",
+          "default": "#pragma glslify:",
+          "description": "Regex pattern for glslify pragma"
         }
       }
     }
@@ -78,15 +83,19 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.18",
-    "mocha": "^5.2.0",
-    "prettier": "^1.16.1",
-    "typescript": "^3.2.4",
-    "vscode": "^1.1.28"
+    "@types/node": "^12.7.5",
+    "@types/vscode": "^1.38.0",
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-consistent-codestyle": "^1.15.1",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typescript": "^3.6.3",
+    "vscode-test": "^1.2.0"
+  },
+  "dependencies": {
+    "glslify": "^7.0.0"
   }
 }

@@ -1,17 +1,27 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-    "editor.tabSize": 2,
-    "editor.formatOnSave": true,
-    "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
-    },
-    "search.exclude": {
-        "out": true // set this to false to include "out" folder in search results
-    },
-    "files.eol": "\n",
-    "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
-    "typescript.format.insertSpaceAfterConstructor": true,
-    "typescript.validate.enable": true,
-    //"tslint.configFile": "tslint.json",
-    "tslint.ignoreDefinitionFiles": false
+  "clang-format.executable": "${workspaceRoot}/node_modules/.bin/clang-format",
+  "clang-format.language.javascript.enable": false,
+  "clang-format.language.typescript.enable": false,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.associations": {
+    ".clang-format": "yaml",
+    ".htmlhintrc": "json",
+    ".prettierrc": "json",
+    ".stylelintrc": "json"
+  },
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "files.exclude": {
+    "dist": true,
+    "node_modules": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
