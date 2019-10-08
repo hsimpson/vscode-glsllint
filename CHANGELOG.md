@@ -8,20 +8,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- glslify support
+- Support environment variables [#5](https://github.com/cadenasgmbh/vscode-glsllint/issues/5)
+- Support glslify [#4](https://github.com/cadenasgmbh/vscode-glsllint/issues/4)
 
 ## [0.0.5]
 
 ### Added
 
-- Additional file extensions supported by glslangValidator (.vert, .tesc, .tese, .geom, .frag, .comp, .rgen, .rint, .rahit, .rchit, .rmiss, .rcall, .mesh, .task)
+- Additional file extensions supported by glslangValidator (.vert, .tesc, .tese, .geom, .frag, .comp, .rgen, .rint, .rahit, .rchit, .rmiss, .rcall, .mesh, .task) [#3](https://github.com/cadenasgmbh/vscode-glsllint/issues/3)
+
+### Fixed
+
 - Error handling when a call to glslangValidator fails
 
 ## [0.0.4]
 
-### Added
+### Fixed
 
-- Option glsllint.glslangValidatorArgs to control additional comand line args for glslangValidator
+- Cannot use this extension with vulkan glsl files [#1](https://github.com/cadenasgmbh/vscode-glsllint/issues/1)
 
 ## [0.0.3]
 
@@ -35,7 +39,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Depends on the extension [Shader languages support for VS Code](https://marketplace.visualstudio.com/items?itemName=slevesque.shader)
 
-### Changed
+### Fixed
 
 - Linting when open a file
 

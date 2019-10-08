@@ -15,10 +15,11 @@ enum glslValidatorFailCodes {
   EFailLinkerCreate
 }
 
-export class GLSLLintingProvider /*implements vscode.CodeActionProvider*/ {
+export class GLSLLintingProvider {
   private static commandId: string = 'glsllint.runCodeAction';
   private command: vscode.Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
+  private readonly ENV_RESOLVE_REGEX = /\$\{(.*?)\}/g;
 
   public activate(subscriptions: vscode.Disposable[]) {
     //this.command = vscode.commands.registerCommand(GLSLLintingProvider.commandId, this.runCodeAction, this);
@@ -67,6 +68,37 @@ export class GLSLLintingProvider /*implements vscode.CodeActionProvider*/ {
       return;
     }
 
+    // try to replace the env variables in glslangValidatorPath
+    // format: "glsllint.glslangValidatorPath": "${env:MY_ENV}/path/to/glslangValidator"
+
+    const glslangValidatorPath = config.glslangValidatorPath.replace(
+      this.ENV_RESOLVE_REGEX,
+      (match: string, variable: string) => {
+        const parts = variable.split(':');
+        let resolved = variable;
+        if (parts.length > 1) {
+          const argument = parts[1];
+          switch (parts[0]) {
+            case 'env': // only support 'env' for environment substitution for the moment
+              const env = process.env[argument];
+              if (env) {
+                resolved = env;
+              } else {
+                vscode.window.showErrorMessage(`Failed to resolve environment variable '${argument}'`);
+              }
+              break;
+            default:
+              vscode.window.showErrorMessage(
+                `Resolving via '${variable}' is not supported, only 'env:YOUR_ENV_VARIABLE' is supported.`
+              );
+              break;
+          }
+        }
+
+        return resolved;
+      }
+    );
+
     let fileContent = textDocument.getText();
 
     const glslifyRegEx = new RegExp(config.glslifyPattern, 'gm');
@@ -106,7 +138,7 @@ export class GLSLLintingProvider /*implements vscode.CodeActionProvider*/ {
 
     let options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
 
-    let childProcess = child_process.spawn(config.glslangValidatorPath, args, options);
+    let childProcess = child_process.spawn(glslangValidatorPath, args, options);
     // childProcess.stdin.write('void main() {}\n');
     childProcess.stdin.write(fileContent);
     childProcess.stdin.end();
@@ -164,19 +196,4 @@ export class GLSLLintingProvider /*implements vscode.CodeActionProvider*/ {
       });
     }
   }
-
-  /*
-  public provideCodeActions(
-    document: vscode.TextDocument,
-    range: vscode.Range | vscode.Selection,
-    context: vscode.CodeActionContext,
-    token: vscode.CancellationToken
-  ): vscode.ProviderResult<(vscode.Command | vscode.CodeAction)[]> {
-    throw new Error('provideCodeActions Method not implemented.');
-  }
-
-  private runCodeAction(document: vscode.TextDocument, range: vscode.Range, message: string): any {
-    throw new Error('runCodeAction Method not implemented.');
-  }
-  */
 }
