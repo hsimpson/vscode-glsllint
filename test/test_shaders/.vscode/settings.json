@@ -1,0 +1,5 @@
+{
+    "glsllint.additionalStageAssociations": {
+        ".rgen": "rgen"
+    }
+}

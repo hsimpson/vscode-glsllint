@@ -119,18 +119,36 @@ export class GLSLLintingProvider {
     const extension = path.extname(textDocument.fileName);
 
     const stageMapping = {
-      '.vs': 'vert',
       '.vert': 'vert',
-      '.fs': 'frag',
+      '.vs': 'vert',
       '.frag': 'frag',
+      '.fs': 'frag',
       '.gs': 'geom',
       '.geom': 'geom',
       '.comp': 'comp',
       '.tesc': 'tesc',
-      '.tese': 'tese'
+      '.tese': 'tese',
+      '.rgen': 'rgen',
+      '.rint': 'rint',
+      '.rahit': 'rahit',
+      '.rchit': 'rchit',
+      '.rmiss': 'rmiss',
+      '.rcall': 'rcall',
+      '.mesh': 'mesh',
+      '.task': 'task'
     };
 
-    const stage = stageMapping[extension] || 'unkown';
+    const additionalStageMappings = config.additionalStageAssociations;
+    const mergedStageMappings = { ...stageMapping, ...additionalStageMappings };
+
+    const stage = mergedStageMappings[extension];
+
+    if (!stage) {
+      vscode.window.showErrorMessage(
+        `GLSL Lint: failed to map extension: '${extension}', you can add it to the extension setting 'glsllint.additionalStageAssociations'`
+      );
+      return;
+    }
 
     args.push('--stdin');
     args.push('-S');

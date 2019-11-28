@@ -4,6 +4,16 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.7]
+
+### Fixed
+
+- Add missing file extension to stage mappings (.rgen, .rint, .rahit, .rchit, .rmiss, .rcall, .mesh, .task) [#7](https://github.com/cadenasgmbh/vscode-glsllint/issues/7)
+
+### Added
+
+- Support configuration of file extension to stage mappings [#7](https://github.com/cadenasgmbh/vscode-glsllint/issues/7)
+
 ## [0.0.6]
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "CADENAS",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     }],
     "configuration": {
       "type": "object",
-      "title": "GLSL Lint configuration",
+      "title": "GLSL Lint",
       "properties": {
         "glsllint.glslangValidatorPath": {
           "type": "string",
@@ -73,6 +73,11 @@
           "type": "string",
           "default": "#pragma glslify:",
           "description": "Regex pattern for glslify pragma"
+        },
+        "glsllint.additionalStageAssociations": {
+          "type": "object",
+          "default": {},
+          "description": "Add another extension -> stage mapping (e.g.: \".vert\": \"vert\""
         }
       }
     }
@@ -84,14 +89,14 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^12.7.5",
+    "@types/node": "^12.12.14",
     "@types/vscode": "^1.38.0",
-    "prettier": "^1.18.2",
-    "tslint": "^5.20.0",
-    "tslint-consistent-codestyle": "^1.15.1",
+    "prettier": "^1.19.1",
+    "tslint": "^5.20.1",
+    "tslint-consistent-codestyle": "^1.16.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.6.3",
-    "vscode-test": "^1.2.0"
+    "typescript": "^3.7.2",
+    "vscode-test": "^1.2.3"
   },
   "dependencies": {
     "glslify": "^7.0.0"

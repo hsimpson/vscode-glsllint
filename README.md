@@ -20,5 +20,44 @@ This extension contributes the following settings:
 
 - `glsllint.glslangValidatorPath`: The path to the glslangValidator executable
 - `glsllint.glslangValidatorArgs`: Arguments for the glslangValidator executable
+- `glsllint.additionalStageAssociations`: Additonal file extension -> glslangValidator stage mapping.
+  Format: `".EXT": "STAGEID"`, example:
+
+```json
+"glsllint.additionalStageAssociations": {
+  ".fs": "frag",
+  ".vs": "vert"
+}
+```
+
+Built-in mappings:
+
+```json
+{
+  ".vert": "vert",
+  ".vs": "vert",
+  ".frag": "frag",
+  ".fs": "frag",
+  ".gs": "geom",
+  ".geom": "geom",
+  ".comp": "comp",
+  ".tesc": "tesc",
+  ".tese": "tese",
+  ".rgen": "rgen",
+  ".rint": "rint",
+  ".rahit": "rahit",
+  ".rchit": "rchit",
+  ".rmiss": "rmiss",
+  ".rcall": "rcall",
+  ".mesh": "mesh",
+  ".task": "task"
+}
+```
+
+Available stages:
+
+```json
+["vert", "frag", "geom", "comp", "tesc", "tese", "rgen", "rint", "rahit", "rchit", "rmiss", "rcall", "mesh", "task"]
+```
 
 ## [Release Notes](CHANGELOG.md)
