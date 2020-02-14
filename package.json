@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "publisher": "CADENAS",
   "repository": {
     "type": "git",
@@ -29,32 +29,34 @@
     "slevesque.shader"
   ],
   "activationEvents": [
-    "onLanguage:glsl"
+    "*"
   ],
   "main": "./out/src/extension",
   "contributes": {
-    "languages": [{
-      "id": "glsl",
-      "aliases": [
-        "GLSL"
-      ],
-      "extensions": [
-        ".vert",
-        ".tesc",
-        ".tese",
-        ".geom",
-        ".frag",
-        ".comp",
-        ".rgen",
-        ".rint",
-        ".rahit",
-        ".rchit",
-        ".rmiss",
-        ".rcall",
-        ".mesh",
-        ".task"
-      ]
-    }],
+    "languages": [
+      {
+        "id": "glsl",
+        "aliases": [
+          "GLSL"
+        ],
+        "extensions": [
+          ".vert",
+          ".tesc",
+          ".tese",
+          ".geom",
+          ".frag",
+          ".comp",
+          ".rgen",
+          ".rint",
+          ".rahit",
+          ".rchit",
+          ".rmiss",
+          ".rcall",
+          ".mesh",
+          ".task"
+        ]
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "GLSL Lint",
@@ -78,6 +80,16 @@
           "type": "object",
           "default": {},
           "description": "Add another extension -> stage mapping (e.g.: \".vert\": \"vert\""
+        },
+        "glsllint.supportedLangsWithStringLiterals": {
+          "type": "array",
+          "default": [
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact"
+          ],
+          "description": "VSCode language id's to support for string literal validation"
         }
       }
     }
@@ -89,13 +101,13 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^12.12.14",
-    "@types/vscode": "^1.38.0",
+    "@types/node": "^13.7.1",
+    "@types/vscode": "^1.42.0",
     "prettier": "^1.19.1",
-    "tslint": "^5.20.1",
+    "tslint": "^6.0.0",
     "tslint-consistent-codestyle": "^1.16.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.7.2",
+    "typescript": "^3.7.5",
     "vscode-test": "^1.2.3"
   },
   "dependencies": {

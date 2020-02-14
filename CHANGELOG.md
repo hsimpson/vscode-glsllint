@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.8]
+
+### Added
+
+- Support for shader code in string literals [#6](https://github.com/cadenasgmbh/vscode-glsllint/issues/6)
+
 ## [0.0.7]
 
 ### Fixed
