@@ -102,7 +102,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.7.1",
-    "@types/vscode": "^1.42.0",
+    "@types/vscode": "^1.38.0",
     "prettier": "^1.19.1",
     "tslint": "^6.0.0",
     "tslint-consistent-codestyle": "^1.16.0",
