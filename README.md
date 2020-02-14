@@ -35,7 +35,7 @@ This extension contributes the following settings:
 
 Built-in mappings:
 
-```json
+```javascript
 {
   ".vert": "vert", // for a vertex shader
   ".vs": "vert", // for a vertex shader
