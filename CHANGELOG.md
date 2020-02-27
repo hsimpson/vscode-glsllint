@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.9]
+
+### Fixed
+
+- Support for empty glsllint.glslangValidatorPath setting, then it must be available in \$PATH [#10](https://github.com/cadenasgmbh/vscode-glsllint/issues/10)
+
 ## [0.0.8]
 
 ### Added

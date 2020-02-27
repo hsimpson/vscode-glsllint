@@ -88,11 +88,7 @@ export class GLSLLintingProvider {
     let glslangValidatorPath = config.glslangValidatorPath;
 
     if (glslangValidatorPath === null || glslangValidatorPath === '') {
-      this.showMessage(
-        'GLSL Lint: glsllint.glslangValidatorPath is empty, please set it to the executable!',
-        MessageSeverity.Error
-      );
-      return '';
+      glslangValidatorPath = 'glslangValidator';
     }
 
     // try to replace the env variables in glslangValidatorPath
@@ -130,7 +126,9 @@ export class GLSLLintingProvider {
       fs.accessSync(glslangValidatorPath, fs.constants.R_OK);
     } catch (error) {
       this.showMessage(
-        'GLSL Lint: glsllint.glslangValidatorPath is empty, please set it to the executable!',
+        `GLSL Lint: glslangValidator binary is not available:
+        ${error.message}
+        Please check your glsllint.glslangValidatorPath setting.`,
         MessageSeverity.Error
       );
       return '';

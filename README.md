@@ -20,7 +20,7 @@ Every shader type which is supported by the glslangValidator can be validated.
 
 This extension contributes the following settings:
 
-- `glsllint.glslangValidatorPath`: The path to the glslangValidator executable
+- `glsllint.glslangValidatorPath`: The path to the glslangValidator executable, let it empty when have it in \$PATH
 - `glsllint.glslangValidatorArgs`: Arguments for the glslangValidator executable
 - `glsllint.additionalStageAssociations`: Additonal file extension -> glslangValidator stage mapping.
   Format: `".EXT": "STAGEID"`, example:
