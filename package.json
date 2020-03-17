@@ -101,14 +101,17 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^13.7.1",
+    "@types/node": "^13.9.1",
     "@types/vscode": "^1.38.0",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "@typescript-eslint/typescript-estree": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "prettier": "^1.19.1",
-    "tslint": "^6.0.0",
-    "tslint-consistent-codestyle": "^1.16.0",
-    "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.7.5",
-    "vscode-test": "^1.2.3"
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
   },
   "dependencies": {
     "glslify": "^7.0.0"

@@ -43,7 +43,7 @@ export class GLSLLintingProvider {
   private readonly ENV_RESOLVE_REGEX = /\$\{(.*?)\}/g;
   private readonly config = vscode.workspace.getConfiguration('glsllint');
 
-  public activate(subscriptions: vscode.Disposable[]) {
+  public activate(subscriptions: vscode.Disposable[]): void {
     //this.command = vscode.commands.registerCommand(GLSLLintingProvider.commandId, this.runCodeAction, this);
     subscriptions.push(this);
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
@@ -98,9 +98,9 @@ export class GLSLLintingProvider {
       let resolved = variable;
       if (parts.length > 1) {
         const argument = parts[1];
+        const env = process.env[argument];
         switch (parts[0]) {
           case 'env': // only support 'env' for environment substitution for the moment
-            const env = process.env[argument];
             if (env) {
               resolved = env;
             } else {
@@ -267,7 +267,7 @@ export class GLSLLintingProvider {
 
     let fileContent = textDocument.getText();
     let diagnostics: vscode.Diagnostic[] = [];
-    let docUri = textDocument.uri;
+    const docUri = textDocument.uri;
 
     if (parseStringLiterals) {
       // hints about TS AST: https://ts-ast-viewer.com
@@ -334,18 +334,18 @@ export class GLSLLintingProvider {
       return;
     }
 
-    let diagnostics: vscode.Diagnostic[] = [];
+    const diagnostics: vscode.Diagnostic[] = [];
 
     // Split the arguments string from the settings
-    let args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+    const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
 
     args.push('--stdin');
     args.push('-S');
     args.push(stage);
 
-    let options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
+    const options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
 
-    let childProcess = child_process.spawn(glslangValidatorPath, args, options);
+    const childProcess = child_process.spawn(glslangValidatorPath, args, options);
     childProcess.stdin.write(source);
     childProcess.stdin.end();
 
@@ -359,7 +359,7 @@ export class GLSLLintingProvider {
       stdErrorData += chunk;
     }
 
-    const exitCode = await new Promise<number>((resolve, reject) => {
+    const exitCode = await new Promise<number>((resolve) => {
       childProcess.on('close', resolve);
     });
 
@@ -373,7 +373,7 @@ export class GLSLLintingProvider {
       `;
       this.showMessage(message, MessageSeverity.Error);
     } else if (exitCode !== glslValidatorFailCodes.ESuccess) {
-      let lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
+      const lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
       for (const line of lines) {
         if (line !== '' && line !== 'stdin') {
           let severity: vscode.DiagnosticSeverity = undefined;
@@ -386,12 +386,12 @@ export class GLSLLintingProvider {
           }
 
           if (severity !== undefined) {
-            let matches = line.match(/WARNING:|ERROR:\s.+?(?=:(\d)+):(\d*): (\W.*)/);
+            const matches = line.match(/WARNING:|ERROR:\s.+?(?=:(\d)+):(\d*): (\W.*)/);
             if (matches && matches.length === 4) {
-              let message = matches[3];
-              let errorline = parseInt(matches[2]);
-              let range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
-              let diagnostic = new vscode.Diagnostic(range, message, severity);
+              const message = matches[3];
+              const errorline = parseInt(matches[2]);
+              const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+              const diagnostic = new vscode.Diagnostic(range, message, severity);
               diagnostics.push(diagnostic);
             }
           }

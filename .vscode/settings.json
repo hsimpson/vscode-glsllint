@@ -1,4 +1,13 @@
 {
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "clang-format.executable": "${workspaceRoot}/node_modules/.bin/clang-format",
   "clang-format.language.javascript.enable": false,
   "clang-format.language.typescript.enable": false,
@@ -10,18 +19,8 @@
     ".prettierrc": "json",
     ".stylelintrc": "json"
   },
-  "typescript.tsdk": "node_modules\\typescript\\lib",
   "files.exclude": {
     "dist": true,
     "node_modules": true
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
