@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.11]
+
+### Fixed
+
+- Linter not working when used `-l` because output error format is different [#15](https://github.com/cadenasgmbh/vscode-glsllint/issues/15)
+
 ## [0.0.10]
 
 ### Fixed

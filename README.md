@@ -24,7 +24,7 @@ This extension contributes the following settings:
 - `glsllint.glslangValidatorArgs`: Arguments for the glslangValidator executable
 - `glsllint.additionalStageAssociations`: Additonal file extension -> glslangValidator stage mapping.
   Format: `".EXT": "STAGEID"`, example:
-- `supportedLangsWithStringLiterals`: VSCode language id"s to support for string literal validation
+- `supportedLangsWithStringLiterals`: VSCode language id's to support for string literal validation
 
 ```json
 "glsllint.additionalStageAssociations": {
