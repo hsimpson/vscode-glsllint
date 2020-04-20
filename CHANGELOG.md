@@ -10,6 +10,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Support automatically linking and include path of current file [#16](https://github.com/cadenasgmbh/vscode-glsllint/issues/16)
 
+### Fixed
+
+- Linting again after code is fixed and have no errors [#17](https://github.com/cadenasgmbh/vscode-glsllint/issues/17)
+
 ## [0.0.12]
 
 ### Fixed

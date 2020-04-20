@@ -389,7 +389,6 @@ export class GLSLLintingProvider {
           ${stdErrorData}
           `;
           this.showMessage(message, MessageSeverity.Error);
-          resolve(diagnostics);
         } else if (exitCode !== glslValidatorFailCodes.ESuccess) {
           const lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
           for (const line of lines) {
@@ -415,8 +414,8 @@ export class GLSLLintingProvider {
               }
             }
           }
-          resolve(diagnostics);
         }
+        resolve(diagnostics);
       });
 
       // write into stdin pipe
