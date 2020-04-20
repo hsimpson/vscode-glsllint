@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.13]
+
+### Added
+
+- Support automatically linking and include path of current file [#16](https://github.com/cadenasgmbh/vscode-glsllint/issues/16)
+
 ## [0.0.12]
 
 ### Fixed

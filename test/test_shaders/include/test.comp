@@ -1,0 +1,7 @@
+
+#version 450
+#extension GL_GOOGLE_include_directive : enable
+#include "test.inc"
+layout (local_size_x = LOCAL_SIZE) in;
+void main()
+{}

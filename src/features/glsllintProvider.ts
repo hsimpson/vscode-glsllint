@@ -287,7 +287,7 @@ export class GLSLLintingProvider {
       stringLiterals = this.getShaderLiterals(stringLiterals);
 
       for (const literal of stringLiterals) {
-        const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage);
+        const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
         // correct the code ranges
 
         for (const literalDiagnostic of literalDiagnostics) {
@@ -317,7 +317,8 @@ export class GLSLLintingProvider {
       }
 
       const stage = this.getShaderStageFromFile(textDocument.fileName);
-      diagnostics = await this.lintShaderCode(fileContent, stage);
+      const filePath = path.dirname(textDocument.fileName);
+      diagnostics = await this.lintShaderCode(fileContent, stage, filePath);
 
       if (glslifyUsed) {
         const glslifyFileName = path.basename(textDocument.fileName);
@@ -332,7 +333,11 @@ export class GLSLLintingProvider {
     this.diagnosticCollection.set(docUri, diagnostics);
   }
 
-  private async lintShaderCode(source: string, stage: string): Promise<vscode.Diagnostic[]> {
+  private async lintShaderCode(
+    source: string,
+    stage: string,
+    includePath: boolean | string
+  ): Promise<vscode.Diagnostic[]> {
     return new Promise<vscode.Diagnostic[]>((resolve) => {
       const glslangValidatorPath = this.getValidatorPath();
 
@@ -341,10 +346,18 @@ export class GLSLLintingProvider {
       // Split the arguments string from the settings
       const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
 
+      if (this.config.linkShader) {
+        args.push('-l');
+      }
       args.push('--stdin');
       args.push('-S');
       args.push(stage);
 
+      if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
+        args.push(`-I${includePath}`);
+      }
+
+      // FIXME: use workspaceFolders instead of rootPath
       const options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
 
       const childProcess = child_process.spawn(glslangValidatorPath, args, options);
