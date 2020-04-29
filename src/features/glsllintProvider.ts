@@ -35,6 +35,12 @@ interface StageExpression {
   expression: RegExp;
 }
 
+interface LanguageSetting {
+  parser: 'TSAST' | 'REGEX';
+  patternStart?: string;
+  patternEnd?: string;
+}
+
 export class GLSLLintingProvider {
   //private static commandId: string = 'glsllint.runCodeAction';
   private command: vscode.Disposable;
@@ -106,10 +112,7 @@ export class GLSLLintingProvider {
             if (env) {
               resolved = env;
             } else {
-              this.showMessage(
-                `GLSL Lint: Failed to resolve environment variable '${argument}'`,
-                MessageSeverity.Error
-              );
+              this.showMessage(`GLSL Lint: Failed to resolve environment variable '${argument}'`, MessageSeverity.Error);
             }
             break;
           default:
@@ -144,11 +147,14 @@ export class GLSLLintingProvider {
   /**
    * get all string literals (even ES6 template literals) from the TypeScript compiler node (recursive)
    */
-  private getStringLiterals(
-    inputNode: ts.Node,
-    currentLiterals: StringLiteral[],
-    sourceFile: ts.SourceFile
-  ): StringLiteral[] {
+  private getStringLiteralsTSAST(inputNode: ts.Node, currentLiterals: StringLiteral[], sourceFile: ts.SourceFile): StringLiteral[] {
+    // hints about TS AST: https://ts-ast-viewer.com
+    // process a file which contains string literals (e.g. JavaScript or TypeScript)
+    /*
+      const tsProgram = ts.createProgram([textDocument.fileName], { allowJs: true });
+      const sourceFile = tsProgram.getSourceFile(textDocument.fileName);
+      */
+
     // check for generic!
     let stringLiterals: StringLiteral[] = currentLiterals;
     ts.forEachChild(inputNode, (currentNode: ts.Node) => {
@@ -156,10 +162,7 @@ export class GLSLLintingProvider {
       console.log(`kind: ${currentNode.kind}`);
       console.log(`text: "${currentNode.getFullText(sourceFile)}"`);
       */
-      if (
-        currentNode.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral ||
-        currentNode.kind === ts.SyntaxKind.StringLiteral
-      ) {
+      if (currentNode.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral || currentNode.kind === ts.SyntaxKind.StringLiteral) {
         stringLiterals.push({
           text: (currentNode as ts.LiteralLikeNode).text,
           startLine: sourceFile.getLineAndCharacterOfPosition(currentNode.getStart(sourceFile)).line,
@@ -167,7 +170,7 @@ export class GLSLLintingProvider {
           stage: 'unknown',
         });
       } else {
-        stringLiterals = this.getStringLiterals(currentNode, stringLiterals, sourceFile);
+        stringLiterals = this.getStringLiteralsTSAST(currentNode, stringLiterals, sourceFile);
       }
     });
     return stringLiterals;
@@ -250,57 +253,105 @@ export class GLSLLintingProvider {
     return shaderLiterals;
   }
 
-  private async doLint(textDocument: vscode.TextDocument): Promise<void> {
-    const languageId = textDocument.languageId;
-    let parseStringLiterals = false;
+  private getShaderStageFromFileREGEX(fileContent: string, languageSettings: LanguageSetting): StringLiteral[] {
+    const stringLiterals: StringLiteral[] = [];
+    const lines = fileContent.split(/(?:\r\n|\r|\n)/g);
 
-    if (languageId !== 'glsl') {
-      // check if we have should support the language for string literal parsing
-      parseStringLiterals = this.config.supportedLangsWithStringLiterals.includes(languageId);
-      if (!parseStringLiterals) {
-        return;
+    const startRegEx = new RegExp(languageSettings.patternStart);
+    const endRegEx = new RegExp(languageSettings.patternEnd);
+
+    let literal = '';
+    let found = false;
+    let startLine = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+      if (found) {
+        if (endRegEx.exec(lines[i]) !== null) {
+          found = false;
+          stringLiterals.push({
+            text: literal,
+            startLine,
+            stage: 'unkown',
+          });
+        } else {
+          literal += lines[i] + '\n';
+        }
+      } else if (startRegEx.exec(lines[i]) !== null) {
+        found = true;
+        startLine = i + 1;
+        literal = '';
       }
     }
+    return stringLiterals;
+  }
 
-    const glsifiedSuffix = '(glslified)';
+  private getStringLiterals(textDocument: vscode.TextDocument): StringLiteral[] {
+    const languageSettings = this.config.languageSettings[textDocument.languageId] as LanguageSetting;
+    let stringLiterals: StringLiteral[] = [];
 
-    if (textDocument.fileName.endsWith(glsifiedSuffix)) {
-      // skip
-      return;
+    if (!languageSettings) {
+      this.showMessage(`Language settings for languageId=${textDocument.languageId} not available.`, MessageSeverity.Error);
+      return [];
     }
 
-    let fileContent = textDocument.getText();
+    const fileContent = textDocument.getText();
+
+    if (languageSettings.parser === 'TSAST') {
+      const sourceFile = ts.createSourceFile(textDocument.fileName, fileContent, ts.ScriptTarget.ES2015);
+      stringLiterals = this.getStringLiteralsTSAST(sourceFile, stringLiterals, sourceFile);
+    } else if (languageSettings.parser === 'REGEX') {
+      stringLiterals = this.getShaderStageFromFileREGEX(fileContent, languageSettings);
+    } else {
+      this.showMessage(
+        `glsllint.languageSettings.${textDocument.languageId}.parser (${languageSettings.parser}) is not valid`,
+        MessageSeverity.Error
+      );
+    }
+
+    stringLiterals = this.getShaderLiterals(stringLiterals);
+    return stringLiterals;
+  }
+
+  private async doLint(textDocument: vscode.TextDocument): Promise<void> {
     let diagnostics: vscode.Diagnostic[] = [];
     const docUri = textDocument.uri;
 
-    if (parseStringLiterals) {
-      // hints about TS AST: https://ts-ast-viewer.com
-      // process a file which contains string literals (e.g. JavaScript or TypeScript)
-      /*
-      const tsProgram = ts.createProgram([textDocument.fileName], { allowJs: true });
-      const sourceFile = tsProgram.getSourceFile(textDocument.fileName);
-      */
-      const sourceFile = ts.createSourceFile(textDocument.fileName, fileContent, ts.ScriptTarget.ES2015);
-      let stringLiterals: StringLiteral[] = [];
-      stringLiterals = this.getStringLiterals(sourceFile, stringLiterals, sourceFile);
+    if (textDocument.languageId !== 'glsl') {
+      if (textDocument.languageId === 'plaintext') {
+        // not supported
+        return;
+      }
 
-      stringLiterals = this.getShaderLiterals(stringLiterals);
+      // check if we should support the language for string literal parsing
+      if (this.config.supportedLangsWithStringLiterals.includes(textDocument.languageId)) {
+        const stringLiterals = this.getStringLiterals(textDocument);
+        for (const literal of stringLiterals) {
+          const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
+          // correct the code ranges
 
-      for (const literal of stringLiterals) {
-        const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
-        // correct the code ranges
-
-        for (const literalDiagnostic of literalDiagnostics) {
-          literalDiagnostic.range = new vscode.Range(
-            literalDiagnostic.range.start.line + literal.startLine,
-            0,
-            literalDiagnostic.range.end.line + literal.startLine,
-            0
-          );
+          for (const literalDiagnostic of literalDiagnostics) {
+            literalDiagnostic.range = new vscode.Range(
+              literalDiagnostic.range.start.line + literal.startLine,
+              0,
+              literalDiagnostic.range.end.line + literal.startLine,
+              0
+            );
+          }
+          diagnostics = [...diagnostics, ...literalDiagnostics];
         }
-        diagnostics = [...diagnostics, ...literalDiagnostics];
+      } else {
+        return;
       }
     } else {
+      const glsifiedSuffix = '(glslified)';
+
+      if (textDocument.fileName.endsWith(glsifiedSuffix)) {
+        // skip
+        return;
+      }
+
+      let fileContent = textDocument.getText();
+
       const glslifyRegEx = new RegExp(this.config.glslifyPattern, 'gm');
       const glslifyUsed = glslifyRegEx.test(fileContent);
 
@@ -308,10 +359,7 @@ export class GLSLLintingProvider {
         try {
           fileContent = glslify.file(textDocument.fileName);
         } catch (error) {
-          this.showMessage(
-            `GLSL Lint: failed to compile the glslify file!\n${error.toString()}`,
-            MessageSeverity.Error
-          );
+          this.showMessage(`GLSL Lint: failed to compile the glslify file!\n${error.toString()}`, MessageSeverity.Error);
           return;
         }
       }
@@ -330,14 +378,11 @@ export class GLSLLintingProvider {
         await vscode.languages.setTextDocumentLanguage(glslifyTextDocument, 'glsl');
       }
     }
+
     this.diagnosticCollection.set(docUri, diagnostics);
   }
 
-  private async lintShaderCode(
-    source: string,
-    stage: string,
-    includePath: boolean | string
-  ): Promise<vscode.Diagnostic[]> {
+  private async lintShaderCode(source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
     return new Promise<vscode.Diagnostic[]>((resolve) => {
       const glslangValidatorPath = this.getValidatorPath();
 
@@ -363,10 +408,7 @@ export class GLSLLintingProvider {
       const childProcess = child_process.spawn(glslangValidatorPath, args, options);
       childProcess.on('error', (error: Error) => {
         if (error) {
-          this.showMessage(
-            `Failed to spawn 'glslangValidator' binary. \nError: ${error.message}`,
-            MessageSeverity.Error
-          );
+          this.showMessage(`Failed to spawn 'glslangValidator' binary. \nError: ${error.message}`, MessageSeverity.Error);
           resolve(diagnostics);
         }
       });

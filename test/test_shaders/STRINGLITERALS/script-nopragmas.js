@@ -1,6 +1,9 @@
 /**
  * This is an example JavaScript file which can contain GLSL code in string literals
  * Every GLSL code block is valid and should not throw validation errors
+ * 
+ * This file is without pragmas: the second string literal throws an error
+ * because it could not be linted
  */
 
 const glsl = `

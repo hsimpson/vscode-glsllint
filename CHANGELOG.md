@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.14]
+
+### Added
+
+- Support string literals in other languages like ELM [#14](https://github.com/cadenasgmbh/vscode-glsllint/issues/14)
+
 ## [0.0.13]
 
 ### Added
