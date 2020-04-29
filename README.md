@@ -27,6 +27,7 @@ This extension contributes the following settings:
 - `glsllint.supportedLangsWithStringLiterals`: VSCode language id's to support for string literal validation
 - `glsllint.linkShader`: Link all input files together to form a single module ('-l' option for glslangValidator, used for includes)
 - `glsllint.useIncludeDirOfFile`: Add `-I[DIR_OF_FILE]` to the glslangValidator command
+- `glsllint.languageSettings.[LANGID]`: Settings per language VScode language ID, there are built in configurations for JS, JSX, TS, TSX and ELM. See below
 
 ```json
 "glsllint.additionalStageAssociations": {
@@ -63,6 +64,14 @@ Available stages:
 
 ```json
 ["vert", "frag", "geom", "comp", "tesc", "tese", "rgen", "rint", "rahit", "rchit", "rmiss", "rcall", "mesh", "task"]
+```
+
+```javascript
+"glsllint.languageSettings": {
+  "parser": "TSAST|REGEX",
+  "patternStart": "[START_REGEX_PATTERN]", // only used when parser: REGEX
+  "patternEnd": "[END_REGEX_PATTERN]" // only used when parser: REGEX
+}
 ```
 
 ## Shader code in string literals
