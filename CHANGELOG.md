@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Support string literals in other languages like ELM [#14](https://github.com/cadenasgmbh/vscode-glsllint/issues/14)
+- Support glslify in string literals[#18](https://github.com/hsimpson/vscode-glsllint/issues/18)
 
 ## [0.0.13]
 

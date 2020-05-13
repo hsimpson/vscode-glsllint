@@ -47,6 +47,7 @@ export class GLSLLintingProvider {
   private diagnosticCollection: vscode.DiagnosticCollection;
   private readonly ENV_RESOLVE_REGEX = /\$\{(.*?)\}/g;
   private readonly config = vscode.workspace.getConfiguration('glsllint');
+  private readonly GLSLIFIED_SUFFIX = '(glslified)';
 
   public activate(subscriptions: vscode.Disposable[]): void {
     //this.command = vscode.commands.registerCommand(GLSLLintingProvider.commandId, this.runCodeAction, this);
@@ -312,6 +313,29 @@ export class GLSLLintingProvider {
     return stringLiterals;
   }
 
+  private useGlslify(content: string): boolean {
+    const glslifyRegEx = new RegExp(this.config.glslifyPattern, 'gm');
+    return glslifyRegEx.test(content);
+  }
+
+  private compileGlslify(content: string): string {
+    try {
+      return glslify.compile(content, { basedir: vscode.workspace.rootPath });
+    } catch (error) {
+      this.showMessage(`GLSL Lint: failed to compile the glslify file!\n${error.toString()}`, MessageSeverity.Error);
+      return '';
+    }
+  }
+
+  private async openGlslifiedDocument(filename: string, content: string): Promise<void> {
+    const glslifyUri = vscode.Uri.parse(`${GLSLifyProvider.scheme}:${filename}-${this.GLSLIFIED_SUFFIX}`);
+    GLSLifyUriMapper.add(glslifyUri, content);
+
+    const glslifyTextDocument = await vscode.workspace.openTextDocument(glslifyUri);
+    await vscode.window.showTextDocument(glslifyTextDocument);
+    await vscode.languages.setTextDocumentLanguage(glslifyTextDocument, 'glsl');
+  }
+
   private async doLint(textDocument: vscode.TextDocument): Promise<void> {
     let diagnostics: vscode.Diagnostic[] = [];
     const docUri = textDocument.uri;
@@ -325,57 +349,57 @@ export class GLSLLintingProvider {
       // check if we should support the language for string literal parsing
       if (this.config.supportedLangsWithStringLiterals.includes(textDocument.languageId)) {
         const stringLiterals = this.getStringLiterals(textDocument);
-        for (const literal of stringLiterals) {
-          const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
-          // correct the code ranges
 
-          for (const literalDiagnostic of literalDiagnostics) {
-            literalDiagnostic.range = new vscode.Range(
-              literalDiagnostic.range.start.line + literal.startLine,
-              0,
-              literalDiagnostic.range.end.line + literal.startLine,
-              0
-            );
+        for (const [i, literal] of stringLiterals.entries()) {
+          const glslifyUsed = this.useGlslify(literal.text);
+          if (glslifyUsed) {
+            literal.text = this.compileGlslify(literal.text);
           }
-          diagnostics = [...diagnostics, ...literalDiagnostics];
+
+          if (literal.text !== '') {
+            const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
+            // correct the code ranges
+
+            for (const literalDiagnostic of literalDiagnostics) {
+              literalDiagnostic.range = new vscode.Range(
+                literalDiagnostic.range.start.line + literal.startLine,
+                0,
+                literalDiagnostic.range.end.line + literal.startLine,
+                0
+              );
+            }
+
+            if (glslifyUsed && literalDiagnostics.length > 0) {
+              await this.openGlslifiedDocument(`${textDocument.fileName}-literal-${i}`, literal.text);
+            }
+
+            diagnostics = [...diagnostics, ...literalDiagnostics];
+          }
         }
       } else {
         return;
       }
     } else {
-      const glsifiedSuffix = '(glslified)';
-
-      if (textDocument.fileName.endsWith(glsifiedSuffix)) {
+      if (textDocument.fileName.endsWith(this.GLSLIFIED_SUFFIX)) {
         // skip
         return;
       }
 
       let fileContent = textDocument.getText();
-
-      const glslifyRegEx = new RegExp(this.config.glslifyPattern, 'gm');
-      const glslifyUsed = glslifyRegEx.test(fileContent);
+      const glslifyUsed = this.useGlslify(fileContent);
 
       if (glslifyUsed) {
-        try {
-          fileContent = glslify.file(textDocument.fileName);
-        } catch (error) {
-          this.showMessage(`GLSL Lint: failed to compile the glslify file!\n${error.toString()}`, MessageSeverity.Error);
-          return;
-        }
+        fileContent = this.compileGlslify(fileContent);
       }
 
-      const stage = this.getShaderStageFromFile(textDocument.fileName);
-      const filePath = path.dirname(textDocument.fileName);
-      diagnostics = await this.lintShaderCode(fileContent, stage, filePath);
+      if (fileContent !== '') {
+        const stage = this.getShaderStageFromFile(textDocument.fileName);
+        const filePath = path.dirname(textDocument.fileName);
+        diagnostics = await this.lintShaderCode(fileContent, stage, filePath);
 
-      if (glslifyUsed) {
-        const glslifyFileName = path.basename(textDocument.fileName);
-        const glslifyUri = vscode.Uri.parse(`${GLSLifyProvider.scheme}:${glslifyFileName}-${glsifiedSuffix}`);
-        GLSLifyUriMapper.add(glslifyUri, fileContent);
-
-        const glslifyTextDocument = await vscode.workspace.openTextDocument(glslifyUri);
-        await vscode.window.showTextDocument(glslifyTextDocument);
-        await vscode.languages.setTextDocumentLanguage(glslifyTextDocument, 'glsl');
+        if (glslifyUsed && diagnostics.length > 0) {
+          await this.openGlslifiedDocument(path.basename(textDocument.fileName), fileContent);
+        }
       }
     }
 
