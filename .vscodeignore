@@ -1,3 +1,4 @@
+.github
 .vscode
 node_modules
 src
@@ -7,7 +8,7 @@ test
 .markdownlint.json
 .prettierrc
 .vscodeignore
-tsconfig.json
+package-lock.json
 tsconfig.json
 **/*.map
 webpack.config.ts
