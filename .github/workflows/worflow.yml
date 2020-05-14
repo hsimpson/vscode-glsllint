@@ -2,8 +2,8 @@ name: makevsix
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 
 jobs:
   cicd:
@@ -37,7 +37,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ steps.package_version.outputs.current-version }}-${{ github.sha }}
           draft: false
-          prerelease: true
+          prerelease: false
 
       - name: Upload Release Asset
         id: upload_release_asset

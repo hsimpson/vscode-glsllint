@@ -4,7 +4,7 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [0.0.14]
+## [1.0.0]
 
 ### Added
 
