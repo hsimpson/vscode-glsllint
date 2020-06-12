@@ -19,15 +19,21 @@ Every shader type which is supported by the glslangValidator can be validated.
 ## Extension Settings
 
 This extension contributes the following settings:
+All settings are prefixed with `glsllint.`
 
-- `glsllint.glslangValidatorPath`: The path to the glslangValidator executable, let it empty when have it in \$PATH
-- `glsllint.glslangValidatorArgs`: Arguments for the glslangValidator executable
-- `glsllint.additionalStageAssociations`: Additonal file extension -> glslangValidator stage mapping.
-  Format: `".EXT": "STAGEID"`, example:
-- `glsllint.supportedLangsWithStringLiterals`: VSCode language id's to support for string literal validation
-- `glsllint.linkShader`: Link all input files together to form a single module ('-l' option for glslangValidator, used for includes)
-- `glsllint.useIncludeDirOfFile`: Add `-I[DIR_OF_FILE]` to the glslangValidator command
-- `glsllint.languageSettings.[LANGID]`: Settings per language VScode language ID, there are built in configurations for JS, JSX, TS, TSX and ELM. See below
+| Setting                            | Default                                                                      | Description                                                                                                  |
+| ---------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `glslangValidatorPath`             | `""`                                                                         | The path to the glslangValidator executable, let it empty when have it in \$PATH                             |
+| `glslangValidatorArgs`             | `""`                                                                         | Arguments for the glslangValidator executable                                                                |
+| `additionalStageAssociations`      | `{}`                                                                         | Additonal file extension -> glslangValidator stage mapping. Format: `{".EXT": "STAGEID"}`, example see below |
+| `supportedLangsWithStringLiterals` | `["javascript", "javascriptreact", "typescript", "typescriptreact", "elm" ]` | VSCode language id's to support for string literal validation                                                |
+| `linkShader`                       | `true`                                                                       | Link all input files together to form a single module ('-l' option for glslangValidator, used for includes)  |
+| `useIncludeDirOfFile`              | `true`                                                                       | Add `-I[DIR_OF_FILE]` to the glslangValidator command                                                        |
+| `languageSettings.[LANGID]`        | see below                                                                    | Settings per language VScode language ID, there are built in configurations for JS, JSX, TS, TSX and ELM.    |
+| `glslifyPattern`                   | `#pragma glslify:`                                                           | Regex pattern for glslify pragma                                                                             |
+| `glslifyAutoOpenOnError`           | `true`                                                                       | Opens the glslified code when there is a linting error                                                       |
+
+### additionalStageAssociations example
 
 ```json
 "glsllint.additionalStageAssociations": {
@@ -66,11 +72,39 @@ Available stages:
 ["vert", "frag", "geom", "comp", "tesc", "tese", "rgen", "rint", "rahit", "rchit", "rmiss", "rcall", "mesh", "task"]
 ```
 
+### languageSettings notation
+
 ```javascript
 "glsllint.languageSettings": {
-  "parser": "TSAST|REGEX",
-  "patternStart": "[START_REGEX_PATTERN]", // only used when parser: REGEX
-  "patternEnd": "[END_REGEX_PATTERN]" // only used when parser: REGEX
+  "LANGID": {
+    "parser": "TSAST|REGEX",
+    "patternStart": "[START_REGEX_PATTERN]", // only used when parser: REGEX
+    "patternEnd": "[END_REGEX_PATTERN]" // only used when parser: REGEX
+  }
+}
+```
+
+### languageSettings default
+
+```javascript
+"glsllint.languageSettings": {
+  "javascript": {
+    "parser": "TSAST"
+  },
+  "javascriptreact": {
+    "parser": "TSAST"
+  },
+  "typescript": {
+    "parser": "TSAST"
+  },
+  "typescriptreact": {
+    "parser": "TSAST"
+  },
+  "elm": {
+    "parser": "REGEX",
+    "patternStart": "\\[glsl",
+    "patternEnd": "\\|\\]"
+  }
 }
 ```
 

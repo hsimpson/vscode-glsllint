@@ -369,7 +369,7 @@ export class GLSLLintingProvider {
               );
             }
 
-            if (glslifyUsed && literalDiagnostics.length > 0) {
+            if (glslifyUsed && this.config.glslifyAutoOpenOnError && literalDiagnostics.length > 0) {
               await this.openGlslifiedDocument(`${textDocument.fileName}-literal-${i}`, literal.text);
             }
 
@@ -397,7 +397,7 @@ export class GLSLLintingProvider {
         const filePath = path.dirname(textDocument.fileName);
         diagnostics = await this.lintShaderCode(fileContent, stage, filePath);
 
-        if (glslifyUsed && diagnostics.length > 0) {
+        if (glslifyUsed && this.config.glslifyAutoOpenOnError && diagnostics.length > 0) {
           await this.openGlslifiedDocument(path.basename(textDocument.fileName), fileContent);
         }
       }
