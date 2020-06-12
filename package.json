@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "CADENAS",
   "repository": {
     "type": "git",
@@ -148,7 +148,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.0.13",
-    "@types/vscode": "^1.46.0",
+    "@types/vscode": "^1.38.0",
     "@types/webpack": "^4.41.17",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
