@@ -8,6 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
+- Allow configuring glslify options via extension settings [#19](https://github.com/cadenasgmbh/vscode-glsllint/issues/19)
 - Allow disabling auto-open of (glslified) file on error [#20](https://github.com/cadenasgmbh/vscode-glsllint/issues/20)
 
 ## [1.0.0]

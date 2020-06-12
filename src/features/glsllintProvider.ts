@@ -320,7 +320,11 @@ export class GLSLLintingProvider {
 
   private compileGlslify(content: string): string {
     try {
-      return glslify.compile(content, { basedir: vscode.workspace.rootPath });
+      const glslifyOptions = {
+        ...this.config.glslifyOptions,
+      };
+      glslifyOptions.basedir = glslifyOptions.basedir || vscode.workspace.rootPath;
+      return glslify.compile(content, glslifyOptions);
     } catch (error) {
       this.showMessage(`GLSL Lint: failed to compile the glslify file!\n${error.toString()}`, MessageSeverity.Error);
       return '';

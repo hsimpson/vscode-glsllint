@@ -81,6 +81,11 @@
           "default": true,
           "description": "Opens the glslified code when there is a linting error"
         },
+        "glsllint.glslifyOptions": {
+          "type": "object",
+          "default": {},
+          "description": "Specify glslify options used in glslify.compile if basedir is not set then the workspace root path is used"
+        },
         "glsllint.additionalStageAssociations": {
           "type": "object",
           "default": {},
