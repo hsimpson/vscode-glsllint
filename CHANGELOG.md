@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.x]
+
+### Fixed
+
+- Shader stage mapping [#3](https://github.com/hsimpson/vscode-glsllint/issues/3)
+
 ## [1.1.0]
 
 ### Added

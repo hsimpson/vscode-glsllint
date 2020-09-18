@@ -178,8 +178,6 @@ export class GLSLLintingProvider {
   }
 
   private getShaderStageFromFile(fileName: string): string {
-    const extension = path.extname(fileName);
-
     const stageMapping = {
       '.vert': 'vert', // for a vertex shader
       '.vs': 'vert', // for a vertex shader
@@ -203,11 +201,18 @@ export class GLSLLintingProvider {
     const additionalStageMappings = this.config.additionalStageAssociations;
     const mergedStageMappings = { ...stageMapping, ...additionalStageMappings };
 
-    const stage = mergedStageMappings[extension];
+    let stage: string;
+
+    for (const [k, v] of Object.entries(mergedStageMappings)) {
+      if (fileName.endsWith(k)) {
+        stage = v as string;
+        break;
+      }
+    }
 
     if (!stage) {
       this.showMessage(
-        `GLSL Lint: failed to map extension: '${extension}', you can add it to the extension setting 'glsllint.additionalStageAssociations'`,
+        `GLSL Lint: failed to map file: '${fileName}', you can add it's extension setting 'glsllint.additionalStageAssociations'`,
         MessageSeverity.Error
       );
     }

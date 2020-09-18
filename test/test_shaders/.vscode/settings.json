@@ -1,1 +1,10 @@
-{}
+{
+  "glsllint.additionalStageAssociations": {
+    ".fragment.fx": "frag",
+    ".vertex.fx": "vert"
+  },
+  "glsllint.glslifyAutoOpenOnError": true,
+  "glsllint.glslifyOptions": {
+    "basedir": "G:\\src\\vscodeextensions\\vscode-glsllint\\test\\test_shaders\\GLSLIFY\\chunks"
+  }
+}
