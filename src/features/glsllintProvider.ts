@@ -198,11 +198,11 @@ export class GLSLLintingProvider {
       '.task': 'task', // for a task shader
     };
 
-    // glslangValidator supports compound extensions now that it supports multiple 
+    // glslangValidator supports compound extensions now that it supports multiple
     // shader languages:
     // .glsl   for .vert.glsl, .tesc.glsl, ..., .comp.glsl compound suffixes
     // .hlsl   for .vert.hlsl, .tesc.hlsl, ..., .comp.hlsl compound suffixes
-    if (fileName.endsWith(".glsl") || fileName.endsWith(".hlsl")) {
+    if (fileName.endsWith('.glsl') || fileName.endsWith('.hlsl')) {
       fileName = fileName.slice(0, -5) ;  
     }
 
