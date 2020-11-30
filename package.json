@@ -147,25 +147,25 @@
     "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^14.11.1",
+    "@types/node": "^14.14.10",
     "@types/vscode": "1.38.0",
-    "@types/webpack": "^4.41.22",
-    "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "@typescript-eslint/parser": "^4.1.1",
-    "@typescript-eslint/typescript-estree": "^4.1.1",
-    "eslint": "^7.9.0",
-    "eslint-config-prettier": "^6.11.0",
+    "@types/webpack": "^4.41.25",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "@typescript-eslint/typescript-estree": "^4.9.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2",
-    "ts-loader": "^8.0.3",
+    "prettier": "^2.2.1",
+    "ts-loader": "^8.0.11",
     "ts-node": "^9.0.0",
-    "vsce": "^1.79.5",
-    "vscode-test": "^1.4.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "vsce": "^1.81.1",
+    "vscode-test": "^1.4.1",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
   },
   "dependencies": {
     "glslify": "^7.1.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.2"
   }
 }
