@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.x]
+
+### Added
+
+- Support compound suffixes like .glsl and .hlsl [#30](https://github.com/hsimpson/vscode-glsllint/issues/30)
+
 ## [1.2.x]
 
 ### Fixed
