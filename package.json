@@ -52,6 +52,7 @@
           ".rchit",
           ".rmiss",
           ".rcall",
+          ".raytrace",
           ".mesh",
           ".task"
         ]
