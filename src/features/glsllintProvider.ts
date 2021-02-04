@@ -203,7 +203,7 @@ export class GLSLLintingProvider {
     // .glsl   for .vert.glsl, .tesc.glsl, ..., .comp.glsl compound suffixes
     // .hlsl   for .vert.hlsl, .tesc.hlsl, ..., .comp.hlsl compound suffixes
     if (fileName.endsWith('.glsl') || fileName.endsWith('.hlsl')) {
-      fileName = fileName.slice(0, -5) ;  
+      fileName = fileName.slice(0, -5);
     }
 
     const additionalStageMappings = this.config.additionalStageAssociations;
@@ -244,7 +244,7 @@ export class GLSLLintingProvider {
 
     // if not match then show error
     const errorMsg = `The shader stage could not be determined automatically.
-    Please add: 
+    Please add:
     '#pragma vscode_glsllint_stage: STAGE'
     to the shader code. Where STAGE is a valid shader stage (e.g.: 'vert' or 'frag', see 'Available stages' in the docs)`;
     this.showMessage(errorMsg, MessageSeverity.Error);
@@ -425,9 +425,57 @@ export class GLSLLintingProvider {
 
   private async lintShaderCode(source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
     return new Promise<vscode.Diagnostic[]>((resolve) => {
-      const glslangValidatorPath = this.getValidatorPath();
-
       const diagnostics: vscode.Diagnostic[] = [];
+
+      try {
+        const stageMap = {
+          vert: 'vertex',
+          frag: 'fragment',
+          comp: 'compute',
+        };
+
+        const args = [`"${source.replace(/\r\n|\r|\n/g, '\\n')}".replace(/\\n/g, "\\n")`, `"${stageMap[stage]}"`, false, '"1.3"'];
+
+        const glslangValidatorPath = `export NODE_PATH=$(npm root -g):$(yarn global dir)/node_modules && $(which node) -e 'require("@webgpu/glslang")().compileGLSL(${args.join(
+          ','
+        )})'`;
+
+        child_process.execSync(glslangValidatorPath, { encoding: 'utf8' });
+      } catch (error) {
+        console.warn(error);
+
+        const lines = error.toString().split(/(?:\r\n|\r|\n)/g);
+
+        for (const line of lines) {
+          if (line !== '' && line !== 'stdin') {
+            let severity: vscode.DiagnosticSeverity = undefined;
+
+            if (line.startsWith('ERROR:')) {
+              severity = vscode.DiagnosticSeverity.Error;
+            }
+            if (line.startsWith('WARNING:')) {
+              severity = vscode.DiagnosticSeverity.Warning;
+            }
+
+            if (severity !== undefined) {
+              const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
+              if (matches && matches.length === 5) {
+                const errorline = parseInt(matches[3]);
+                const message = matches[4];
+                const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                const diagnostic = new vscode.Diagnostic(range, message, severity);
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+
+        resolve(diagnostics);
+      }
+
+      return;
+
+      const glslangValidatorPath = this.getValidatorPath();
 
       // Split the arguments string from the settings
       const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
