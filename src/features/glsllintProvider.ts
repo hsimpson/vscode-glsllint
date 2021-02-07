@@ -4,8 +4,9 @@ import * as path from 'path';
 import * as glslify from 'glslify';
 import { GLSLifyProvider } from './glslifyProvider';
 import { GLSLifyUriMapper } from './glslifyUriMapper';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import { stageExpressions } from './glslStageExpression';
+import { glslangLint } from './glslangLinter';
 
 enum glslValidatorFailCodes {
   ESuccess = 0,
@@ -28,11 +29,6 @@ interface StringLiteral {
   startLine: number;
   //end: number;
   stage: string;
-}
-
-interface StageExpression {
-  stage: string;
-  expression: RegExp;
 }
 
 interface LanguageSetting {
@@ -424,90 +420,142 @@ export class GLSLLintingProvider {
   }
 
   private async lintShaderCode(source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
-    return new Promise<vscode.Diagnostic[]>((resolve) => {
-      const glslangValidatorPath = this.getValidatorPath();
+    // const diagnostics: vscode.Diagnostic[] = [];
+    const diagnostics = await glslangLint(source, stage, includePath);
+    return diagnostics;
 
-      const diagnostics: vscode.Diagnostic[] = [];
+    /*
+      try {
+        const stageMap = {
+          vert: 'vertex',
+          frag: 'fragment',
+          comp: 'compute',
+        };
 
-      // Split the arguments string from the settings
-      const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+        const args = [`"${source.replace(/\r\n|\r|\n/g, '\\n')}".replace(/\\n/g, "\\n")`, `"${stageMap[stage]}"`, false, '"1.3"'];
 
-      if (this.config.linkShader) {
-        args.push('-l');
-      }
-      args.push('--stdin');
-      args.push('-S');
-      args.push(stage);
+        const glslangValidatorPath = `export NODE_PATH=$(npm root -g):$(yarn global dir)/node_modules && $(which node) -e 'require("@webgpu/glslang")().compileGLSL(${args.join(
+          ','
+        )})'`;
 
-      if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
-        args.push(`-I${includePath}`);
-      }
+        child_process.execSync(glslangValidatorPath, { encoding: 'utf8' });
+      } catch (error) {
+        console.warn(error);
 
-      // FIXME: use workspaceFolders instead of rootPath
-      const options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
+        const lines = error.toString().split(/(?:\r\n|\r|\n)/g);
 
-      const childProcess = child_process.spawn(glslangValidatorPath, args, options);
-      childProcess.on('error', (error: Error) => {
-        if (error) {
-          this.showMessage(`Failed to spawn 'glslangValidator' binary. \nError: ${error.message}`, MessageSeverity.Error);
-          resolve(diagnostics);
+        for (const line of lines) {
+          if (line !== '' && line !== 'stdin') {
+            let severity: vscode.DiagnosticSeverity = undefined;
+
+            if (line.startsWith('ERROR:')) {
+              severity = vscode.DiagnosticSeverity.Error;
+            }
+            if (line.startsWith('WARNING:')) {
+              severity = vscode.DiagnosticSeverity.Warning;
+            }
+
+            if (severity !== undefined) {
+              const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
+              if (matches && matches.length === 5) {
+                const errorline = parseInt(matches[3]);
+                const message = matches[4];
+                const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                const diagnostic = new vscode.Diagnostic(range, message, severity);
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
         }
-      });
 
-      let stdErrorData = '';
-      let stdOutData = '';
-      childProcess.stderr.on('data', (chunk) => {
-        stdErrorData += chunk;
-      });
-      childProcess.stdout.on('data', (chunk) => {
-        stdOutData += chunk;
-      });
-      childProcess.on('close', (exitCode) => {
-        if (exitCode === glslValidatorFailCodes.EFailUsage) {
-          // general error when starting glsl validator
-          const message = `Wrong parameters when starting glslangValidator.
+        resolve(diagnostics);
+      }
+      */
+
+    /*
+    return;
+
+    const glslangValidatorPath = this.getValidatorPath();
+
+    // Split the arguments string from the settings
+    const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+
+    if (this.config.linkShader) {
+      args.push('-l');
+    }
+    args.push('--stdin');
+    args.push('-S');
+    args.push(stage);
+
+    if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
+      args.push(`-I${includePath}`);
+    }
+
+    // FIXME: use workspaceFolders instead of rootPath
+    const options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
+
+    const childProcess = child_process.spawn(glslangValidatorPath, args, options);
+    childProcess.on('error', (error: Error) => {
+      if (error) {
+        this.showMessage(`Failed to spawn 'glslangValidator' binary. \nError: ${error.message}`, MessageSeverity.Error);
+        resolve(diagnostics);
+      }
+    });
+
+    let stdErrorData = '';
+    let stdOutData = '';
+    childProcess.stderr.on('data', (chunk) => {
+      stdErrorData += chunk;
+    });
+    childProcess.stdout.on('data', (chunk) => {
+      stdOutData += chunk;
+    });
+    childProcess.on('close', (exitCode) => {
+      if (exitCode === glslValidatorFailCodes.EFailUsage) {
+        // general error when starting glsl validator
+        const message = `Wrong parameters when starting glslangValidator.
           Arguments:
           ${args.join('\n')}
           stderr:
           ${stdErrorData}
           `;
-          this.showMessage(message, MessageSeverity.Error);
-        } else if (exitCode !== glslValidatorFailCodes.ESuccess) {
-          const lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
-          for (const line of lines) {
-            if (line !== '' && line !== 'stdin') {
-              let severity: vscode.DiagnosticSeverity = undefined;
+        this.showMessage(message, MessageSeverity.Error);
+      } else if (exitCode !== glslValidatorFailCodes.ESuccess) {
+        const lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
+        for (const line of lines) {
+          if (line !== '' && line !== 'stdin') {
+            let severity: vscode.DiagnosticSeverity = undefined;
 
-              if (line.startsWith('ERROR:')) {
-                severity = vscode.DiagnosticSeverity.Error;
-              }
-              if (line.startsWith('WARNING:')) {
-                severity = vscode.DiagnosticSeverity.Warning;
-              }
+            if (line.startsWith('ERROR:')) {
+              severity = vscode.DiagnosticSeverity.Error;
+            }
+            if (line.startsWith('WARNING:')) {
+              severity = vscode.DiagnosticSeverity.Warning;
+            }
 
-              if (severity !== undefined) {
-                const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
-                if (matches && matches.length === 5) {
-                  const errorline = parseInt(matches[3]);
-                  const message = matches[4];
-                  const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
-                  const diagnostic = new vscode.Diagnostic(range, message, severity);
-                  diagnostics.push(diagnostic);
-                }
+            if (severity !== undefined) {
+              const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
+              if (matches && matches.length === 5) {
+                const errorline = parseInt(matches[3]);
+                const message = matches[4];
+                const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                const diagnostic = new vscode.Diagnostic(range, message, severity);
+                diagnostics.push(diagnostic);
               }
             }
           }
         }
-        resolve(diagnostics);
-      });
-
-      // write into stdin pipe
-      try {
-        childProcess.stdin.write(source);
-        childProcess.stdin.end();
-      } catch (error) {
-        this.showMessage(`Failed to write to STDIN \nError: ${error.message}`, MessageSeverity.Error);
       }
+      resolve(diagnostics);
     });
+
+    // write into stdin pipe
+    try {
+      childProcess.stdin.write(source);
+      childProcess.stdin.end();
+    } catch (error) {
+      this.showMessage(`Failed to write to STDIN \nError: ${error.message}`, MessageSeverity.Error);
+    }
+    */
   }
 }

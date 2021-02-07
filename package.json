@@ -165,6 +165,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "@webgpu/glslang": "^0.0.15",
     "glslify": "^7.1.1",
     "typescript": "^4.1.2"
   }
