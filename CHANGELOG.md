@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.x]
+
+### Fixed
+
+- Set scope for `glslangValidatorPath` to machine so it could not be overwritten from workspace
+
 ## [1.3.x]
 
 ### Added
