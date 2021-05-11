@@ -30,11 +30,6 @@ interface StringLiteral {
   stage: string;
 }
 
-interface StageExpression {
-  stage: string;
-  expression: RegExp;
-}
-
 interface LanguageSetting {
   parser: 'TSAST' | 'REGEX';
   patternStart?: string;
@@ -203,7 +198,7 @@ export class GLSLLintingProvider {
     // .glsl   for .vert.glsl, .tesc.glsl, ..., .comp.glsl compound suffixes
     // .hlsl   for .vert.hlsl, .tesc.hlsl, ..., .comp.hlsl compound suffixes
     if (fileName.endsWith('.glsl') || fileName.endsWith('.hlsl')) {
-      fileName = fileName.slice(0, -5) ;  
+      fileName = fileName.slice(0, -5);
     }
 
     const additionalStageMappings = this.config.additionalStageAssociations;
