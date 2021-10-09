@@ -85,8 +85,7 @@ export class GLSLLintingProvider {
   }
 
   private getValidatorPath(): string {
-    const config = vscode.workspace.getConfiguration('glsllint');
-    let glslangValidatorPath = config.glslangValidatorPath;
+    let glslangValidatorPath = this.config.glslangValidatorPath;
 
     if (glslangValidatorPath === null || glslangValidatorPath === '') {
       glslangValidatorPath = 'glslangValidator';
@@ -326,17 +325,25 @@ export class GLSLLintingProvider {
     return glslifyRegEx.test(content);
   }
 
-  private compileGlslify(content: string): string {
+  private compileGlslify(content: string, basedir: string): string {
     try {
-      const glslifyOptions = {
-        ...this.config.glslifyOptions,
-      };
-      glslifyOptions.basedir = glslifyOptions.basedir || vscode.workspace.rootPath;
-      return glslify.compile(content, glslifyOptions);
+      return glslify.compile(content, { basedir });
     } catch (error) {
       this.showMessage(`GLSL Lint: failed to compile the glslify file!\n${error.toString()}`, MessageSeverity.Error);
       return '';
     }
+  }
+
+  private getGlslifyBaseDir(textDocument: vscode.TextDocument): string {
+    if (this.config.glslifyOptions.basedir) {
+      return this.config.glslifyOptions.basedir; // use the user defined base dir
+    }
+
+    if (this.config.glslifyUseCurrentFileAsBasedir) {
+      return path.dirname(textDocument.fileName); // use the current file's directory
+    }
+
+    return vscode.workspace.rootPath;
   }
 
   private async openGlslifiedDocument(filename: string, content: string): Promise<void> {
@@ -365,7 +372,7 @@ export class GLSLLintingProvider {
         for (const [i, literal] of stringLiterals.entries()) {
           const glslifyUsed = this.useGlslify(literal.text);
           if (glslifyUsed) {
-            literal.text = this.compileGlslify(literal.text);
+            literal.text = this.compileGlslify(literal.text, this.getGlslifyBaseDir(textDocument));
           }
 
           if (literal.text !== '') {
@@ -401,7 +408,7 @@ export class GLSLLintingProvider {
       const glslifyUsed = this.useGlslify(fileContent);
 
       if (glslifyUsed) {
-        fileContent = this.compileGlslify(fileContent);
+        fileContent = this.compileGlslify(fileContent, this.getGlslifyBaseDir(textDocument));
       }
 
       if (fileContent !== '') {

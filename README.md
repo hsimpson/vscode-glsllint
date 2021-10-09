@@ -32,7 +32,8 @@ All settings are prefixed with `glsllint.`
 | `languageSettings.[LANGID]`        | see below                                                                    | Settings per language VScode language ID, there are built in configurations for JS, JSX, TS, TSX and ELM.    |
 | `glslifyPattern`                   | `#pragma glslify:`                                                           | Regex pattern for glslify pragma                                                                             |
 | `glslifyAutoOpenOnError`           | `true`                                                                       | Opens the glslified code when there is a linting error                                                       |
-| `glslifyOptions`                   | `{}`                                                                         | Specify glslify options used in glslify.compile() if basedir is not set then the workspace root path is used |
+| `glslifyOptions.basedir`           | `""`                                                                         | Specify the base directory for glslify.compile()                                                             |
+| `glslifyUseCurrentFileAsBasedir`   | `false`                                                                      | Use the current file as the base directory for glslify (only if `glslifyOptions.basedir` is not set)         |
 
 ### additionalStageAssociations example
 

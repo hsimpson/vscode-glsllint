@@ -5,6 +5,7 @@
   },
   "glsllint.glslifyAutoOpenOnError": true,
   "glsllint.glslifyOptions": {
-    "basedir": "G:\\src\\vscodeextensions\\vscode-glsllint\\test\\test_shaders\\GLSLIFY\\chunks"
-  }
+    // "basedir": "G:\\src\\vscodeextensions\\vscode-glsllint\\test\\test_shaders\\GLSLIFY\\chunks"
+  },
+  "glsllint.glslifyUseCurrentFileAsBasedir": true
 }

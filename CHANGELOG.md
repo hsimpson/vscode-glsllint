@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.5.x]
+
+### Added
+
+- Support glslify current file as basedir [#35](https://github.com/hsimpson/vscode-glsllint/issues/35)
+
 ## [1.4.x]
 
 ### Fixed
