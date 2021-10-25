@@ -10,6 +10,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Support glslify current file as basedir [#35](https://github.com/hsimpson/vscode-glsllint/issues/35)
 
+### Fixed
+
+- Update packages (security fixes)
+
 ## [1.4.x]
 
 ### Fixed
