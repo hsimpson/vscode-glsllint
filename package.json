@@ -1,7 +1,7 @@
 {
   "name": "vscode-glsllint",
-  "version": "1.5.1",
-  "publisher": "CADENAS",
+  "version": "1.6.0",
+  "publisher": "dtoplak",
   "repository": {
     "type": "git",
     "url": "https://github.com/hsimpson/vscode-glsllint.git"
@@ -22,7 +22,8 @@
     "Fragment shader",
     "OpenGL",
     "WebGL",
-    "OpenGL Shading Language"
+    "OpenGL Shading Language",
+    "Vulkan"
   ],
   "icon": "icon.png",
   "extensionDependencies": [
@@ -153,25 +154,25 @@
     "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^16.11.5",
+    "@types/node": "^16.11.7",
     "@types/vscode": "1.38.0",
     "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.2.0",
-    "@typescript-eslint/parser": "^5.2.0",
-    "@typescript-eslint/typescript-estree": "^5.2.0",
-    "eslint": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "@typescript-eslint/typescript-estree": "^5.4.0",
+    "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.4.1",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
-    "vsce": "^1.100.2",
+    "vsce": "^2.3.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.60.0",
+    "webpack": "^5.64.1",
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "glslify": "^7.1.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }
