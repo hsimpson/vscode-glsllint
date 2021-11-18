@@ -10,7 +10,7 @@
     "vscode": "^1.38.0"
   },
   "license": "MIT",
-  "displayName": "GLSL Lint",
+  "displayName": "GLSL Lint (deprecated)",
   "description": "Linting of GLSL shader code",
   "categories": [
     "Programming Languages",
