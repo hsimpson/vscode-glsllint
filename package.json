@@ -26,7 +26,8 @@
   ],
   "icon": "icon.png",
   "extensionDependencies": [
-    "slevesque.shader"
+    "slevesque.shader",
+    "dtoplak.vscode-glsllint"
   ],
   "activationEvents": [
     "*"
