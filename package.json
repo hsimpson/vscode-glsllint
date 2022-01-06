@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "1.6.0",
+  "version": "1.7.0-dev",
   "publisher": "dtoplak",
   "repository": {
     "type": "git",
@@ -154,21 +154,21 @@
     "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^16.11.7",
+    "@types/node": "^16.11.10",
     "@types/vscode": "1.38.0",
     "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@typescript-eslint/typescript-estree": "^5.4.0",
-    "eslint": "^8.2.0",
+    "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
-    "vsce": "^2.3.0",
+    "vsce": "^2.5.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.64.1",
+    "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
