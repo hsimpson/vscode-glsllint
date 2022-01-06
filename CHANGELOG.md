@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.7.x]
+
+### Added
+
+- Save SPIR-V files to $TEMP [#38](https://github.com/hsimpson/vscode-glsllint/issues/38)
+
 ## [1.6.x]
 
 ### Added
