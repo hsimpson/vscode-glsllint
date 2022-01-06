@@ -1,10 +1,12 @@
 import * as child_process from 'child_process';
-import * as vscode from 'vscode';
-import * as path from 'path';
+import * as fs from 'fs';
 import * as glslify from 'glslify';
+import * as os from 'os';
+import * as path from 'path';
+import * as ts from 'typescript';
+import * as vscode from 'vscode';
 import { GLSLifyProvider } from './glslifyProvider';
 import { GLSLifyUriMapper } from './glslifyUriMapper';
-import * as ts from 'typescript';
 import { stageExpressions } from './glslStageExpression';
 
 enum glslValidatorFailCodes {
@@ -433,6 +435,7 @@ export class GLSLLintingProvider {
 
       // Split the arguments string from the settings
       const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+      const tempFile = path.join(os.tmpdir(), `vscode-glsllint-${stage}.tmp`);
 
       if (this.config.linkShader) {
         args.push('-l');
@@ -440,6 +443,8 @@ export class GLSLLintingProvider {
       args.push('--stdin');
       args.push('-S');
       args.push(stage);
+      args.push('-o');
+      args.push(tempFile);
 
       if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
         args.push(`-I${includePath}`);
@@ -447,6 +452,8 @@ export class GLSLLintingProvider {
 
       // FIXME: use workspaceFolders instead of rootPath
       const options = vscode.workspace.rootPath ? { cwd: vscode.workspace.rootPath } : undefined;
+
+      console.log(`${glslangValidatorPath} ${args.join(' ')}`);
 
       const childProcess = child_process.spawn(glslangValidatorPath, args, options);
       childProcess.on('error', (error: Error) => {
@@ -499,6 +506,9 @@ export class GLSLLintingProvider {
               }
             }
           }
+        }
+        if (fs.existsSync(tempFile)) {
+          fs.unlinkSync(tempFile);
         }
         resolve(diagnostics);
       });
