@@ -10,6 +10,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Save SPIR-V files to $TEMP [#38](https://github.com/hsimpson/vscode-glsllint/issues/38)
 
+### Fixed
+
+- Only use -o for temp file when a specific SPIR-V binary option is turned on [#42](https://github.com/hsimpson/vscode-glsllint/issues/42)
+
 ## [1.6.x]
 
 ### Added
