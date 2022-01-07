@@ -7,7 +7,7 @@
   "glsllint.glslifyOptions": {
     // "basedir": "G:\\src\\vscodeextensions\\vscode-glsllint\\test\\test_shaders\\GLSLIFY\\chunks"
   },
-  "glsllint.glslangValidatorArgs": "--target-env vulkan1.1",
+  // "glsllint.glslangValidatorArgs": "--target-env vulkan1.1",
   "glsllint.glslifyUseCurrentFileAsBasedir": true,
   "glsllint.linkShader": false
 }

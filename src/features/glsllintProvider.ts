@@ -427,6 +427,14 @@ export class GLSLLintingProvider {
     this.diagnosticCollection.set(docUri, diagnostics);
   }
 
+  private willCreateSPIRVBinary(args: string[]): boolean {
+    if (args.includes('-G') || args.includes('-V') || args.includes('--client') || args.includes('--target-env')) {
+      return true;
+    }
+
+    return false;
+  }
+
   private async lintShaderCode(source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
     return new Promise<vscode.Diagnostic[]>((resolve) => {
       const glslangValidatorPath = this.getValidatorPath();
@@ -435,7 +443,6 @@ export class GLSLLintingProvider {
 
       // Split the arguments string from the settings
       const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
-      const tempFile = path.join(os.tmpdir(), `vscode-glsllint-${stage}.tmp`);
 
       if (this.config.linkShader) {
         args.push('-l');
@@ -443,8 +450,12 @@ export class GLSLLintingProvider {
       args.push('--stdin');
       args.push('-S');
       args.push(stage);
-      args.push('-o');
-      args.push(tempFile);
+
+      const tempFile = path.join(os.tmpdir(), `vscode-glsllint-${stage}.tmp`);
+      if (this.willCreateSPIRVBinary(args)) {
+        args.push('-o');
+        args.push(tempFile);
+      }
 
       if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
         args.push(`-I${includePath}`);
