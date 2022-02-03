@@ -214,13 +214,6 @@ export class GLSLLintingProvider {
       }
     }
 
-    if (!stage) {
-      this.showMessage(
-        `GLSL Lint: failed to map file: '${fileName}', you can add it's extension setting 'glsllint.additionalStageAssociations'`,
-        MessageSeverity.Error
-      );
-    }
-
     return stage;
   }
 
@@ -447,6 +440,18 @@ export class GLSLLintingProvider {
       if (this.config.linkShader) {
         args.push('-l');
       }
+
+      if (!stage) {
+        stage = this.config.fallBackStage;
+      }
+
+      if (!stage) {
+        this.showMessage(
+          `GLSL Lint: failed to detect shader stage, you can add it's extension setting 'glsllint.additionalStageAssociations' or configure a fallback stage with 'glsllint.fallBackStage'`,
+          MessageSeverity.Error
+        );
+      }
+
       args.push('--stdin');
       args.push('-S');
       args.push(stage);

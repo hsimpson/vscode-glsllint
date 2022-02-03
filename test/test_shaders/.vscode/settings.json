@@ -9,5 +9,7 @@
   },
   // "glsllint.glslangValidatorArgs": "--target-env vulkan1.1",
   "glsllint.glslifyUseCurrentFileAsBasedir": true,
-  "glsllint.linkShader": false
+  "glsllint.linkShader": false,
+  "glsllint.glslangValidatorArgs": "-V",
+  "glsllint.fallBackStage": "comp"
 }
