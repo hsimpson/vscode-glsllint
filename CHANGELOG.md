@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.8.x]
+
+### Added
+
+- Optional fallback stage to configure [#44](https://github.com/hsimpson/vscode-glsllint/issues/44)
+
 ## [1.7.x]
 
 ### Added

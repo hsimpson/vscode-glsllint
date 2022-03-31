@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "publisher": "dtoplak",
   "repository": {
     "type": "git",
@@ -98,6 +98,11 @@
           "default": {},
           "description": "Add another extension -> stage mapping (e.g.: \".vert\": \"vert\""
         },
+        "glsllint.fallBackStage": {
+          "type": "string",
+          "default": "",
+          "description": "Fallback stage for when the shader stage could not be decuted"
+        },
         "glsllint.supportedLangsWithStringLiterals": {
           "type": "array",
           "default": [
@@ -154,25 +159,25 @@
     "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "^17.0.8",
+    "@types/node": "^17.0.23",
     "@types/vscode": "1.38.0",
     "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
-    "@typescript-eslint/parser": "^5.9.0",
-    "@typescript-eslint/typescript-estree": "^5.9.0",
-    "eslint": "^8.6.0",
-    "eslint-config-prettier": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "@typescript-eslint/typescript-estree": "^5.17.0",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.5.1",
-    "ts-loader": "^9.2.6",
-    "ts-node": "^10.4.0",
-    "vsce": "^2.6.3",
+    "prettier": "^2.6.1",
+    "ts-loader": "^9.2.8",
+    "ts-node": "^10.7.0",
+    "vsce": "^2.7.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.1"
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
   },
   "dependencies": {
     "glslify": "^7.1.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.6.3"
   }
 }
