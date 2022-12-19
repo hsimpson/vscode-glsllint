@@ -371,7 +371,7 @@ export class GLSLLintingProvider {
           }
 
           if (literal.text !== '') {
-            const literalDiagnostics = await this.lintShaderCode(literal.text, literal.stage, false);
+            const literalDiagnostics = await this.lintShaderCode(textDocument.uri, literal.text, literal.stage, false);
             // correct the code ranges
 
             for (const literalDiagnostic of literalDiagnostics) {
@@ -409,7 +409,7 @@ export class GLSLLintingProvider {
       if (fileContent !== '') {
         const stage = this.getShaderStageFromFile(textDocument.fileName);
         const filePath = path.dirname(textDocument.fileName);
-        diagnostics = await this.lintShaderCode(fileContent, stage, filePath);
+        diagnostics = await this.lintShaderCode(textDocument.uri, fileContent, stage, filePath);
 
         if (glslifyUsed && this.config.glslifyAutoOpenOnError && diagnostics.length > 0) {
           await this.openGlslifiedDocument(path.basename(textDocument.fileName), fileContent);
@@ -428,14 +428,30 @@ export class GLSLLintingProvider {
     return false;
   }
 
-  private async lintShaderCode(source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
+  private async lintShaderCode(uri: vscode.Uri, source: string, stage: string, includePath: boolean | string): Promise<vscode.Diagnostic[]> {
     return new Promise<vscode.Diagnostic[]>((resolve) => {
       const glslangValidatorPath = this.getValidatorPath();
-
       const diagnostics: vscode.Diagnostic[] = [];
+      const fileName: string = vscode.workspace.asRelativePath(uri);
 
       // Split the arguments string from the settings
-      const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+      const args = ((typeof this.config.glslangValidatorArgs == "string" ? 
+        this.config.glslangValidatorArgs : (
+        this.config.glslangValidatorArgs[Object.keys(this.config.glslangValidatorArgs).find((match)=> fileName.endsWith(match))]
+       || this.config.glslangValidatorArgs[""] || this.config.glslangValidatorArgs["*"])) || "").split(/\s+/).filter((arg) => arg);
+
+      //
+      let basis = "";
+
+      // if has in-source file (i.e. basis)
+      // TODO: make correct input detection
+      const lastname = (args[args.length-1]||"");
+      if (path.extname(lastname.trim()).startsWith(".") && 
+        !lastname.includes("vulkan1") &&
+        !lastname.includes("spirv1")
+      ) {
+        basis = vscode.workspace.asRelativePath(args.pop());
+      }
 
       if (this.config.linkShader) {
         args.push('-l');
@@ -445,16 +461,13 @@ export class GLSLLintingProvider {
         stage = this.config.fallBackStage;
       }
 
-      if (!stage) {
+      // TODO: detect stage by basis
+      if (!stage && !basis) {
         this.showMessage(
           `GLSL Lint: failed to detect shader stage, you can add it's extension setting 'glsllint.additionalStageAssociations' or configure a fallback stage with 'glsllint.fallBackStage'`,
           MessageSeverity.Error
         );
       }
-
-      args.push('--stdin');
-      args.push('-S');
-      args.push(stage);
 
       const tempFile = path.join(os.tmpdir(), `vscode-glsllint-${stage}.tmp`);
       if (this.willCreateSPIRVBinary(args)) {
@@ -464,6 +477,20 @@ export class GLSLLintingProvider {
 
       if (this.config.useIncludeDirOfFile && includePath && includePath !== '') {
         args.push(`-I${includePath}`);
+      }
+
+      if (basis) {
+        if (stage) {
+          args.push('-S');
+          args.push(stage);
+        }
+        args.push(basis);
+      } else {
+        args.push('--stdin');
+        if (stage) {
+          args.push('-S');
+          args.push(stage);
+        }
       }
 
       // FIXME: use workspaceFolders instead of rootPath
@@ -513,11 +540,20 @@ export class GLSLLintingProvider {
               if (severity !== undefined) {
                 const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
                 if (matches && matches.length === 5) {
+                  const filename = matches[2];
                   const errorline = parseInt(matches[3]);
                   const message = matches[4];
-                  const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
-                  const diagnostic = new vscode.Diagnostic(range, message, severity);
-                  diagnostics.push(diagnostic);
+
+                  // TODO: correctly file path handling
+                  const ps = filename.trim();
+                  const pi = fileName.trim();
+                  console.log(ps);
+                  console.log(pi);
+                  if (filename.endsWith("stdin") && !path.extname(ps) || ps.includes(pi) || pi.includes(ps)) {
+                    const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                    const diagnostic = new vscode.Diagnostic(range, message, severity);
+                    diagnostics.push(diagnostic);
+                  }
                 }
               }
             }
@@ -531,7 +567,9 @@ export class GLSLLintingProvider {
 
       // write into stdin pipe
       try {
-        childProcess.stdin.write(source);
+        if (!basis) {
+          childProcess.stdin.write(source);
+        }
         childProcess.stdin.end();
       } catch (error) {
         this.showMessage(`Failed to write to STDIN \nError: ${error.message}`, MessageSeverity.Error);

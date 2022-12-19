@@ -1,183 +1,195 @@
 {
-  "name": "vscode-glsllint",
-  "version": "1.8.0",
-  "publisher": "dtoplak",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hsimpson/vscode-glsllint.git"
-  },
-  "engines": {
-    "vscode": "^1.38.0"
-  },
-  "license": "MIT",
-  "displayName": "GLSL Lint",
-  "description": "Linting of GLSL shader code",
-  "categories": [
-    "Programming Languages",
-    "Linters"
-  ],
-  "keywords": [
-    "GLSL",
-    "Shader",
-    "Fragment shader",
-    "OpenGL",
-    "WebGL",
-    "OpenGL Shading Language",
-    "Vulkan"
-  ],
-  "icon": "icon.png",
-  "extensionDependencies": [
-    "slevesque.shader"
-  ],
-  "activationEvents": [
-    "*"
-  ],
-  "main": "./dist/extension",
-  "contributes": {
-    "languages": [
-      {
-        "id": "glsl",
-        "aliases": [
-          "GLSL"
-        ],
-        "extensions": [
-          ".vert",
-          ".tesc",
-          ".tese",
-          ".geom",
-          ".frag",
-          ".comp",
-          ".rgen",
-          ".rint",
-          ".rahit",
-          ".rchit",
-          ".rmiss",
-          ".rcall",
-          ".mesh",
-          ".task"
-        ]
-      }
-    ],
-    "configuration": {
-      "type": "object",
-      "title": "GLSL Lint",
-      "properties": {
-        "glsllint.glslangValidatorPath": {
-          "scope": "machine",
-          "type": "string",
-          "default": "",
-          "description": "The path to the glslangValidator executable"
-        },
-        "glsllint.glslangValidatorArgs": {
-          "type": "string",
-          "default": "",
-          "description": "Arguments for the glslangValidator executable"
-        },
-        "glsllint.glslifyPattern": {
-          "type": "string",
-          "default": "#pragma glslify:",
-          "description": "Regex pattern for glslify pragma"
-        },
-        "glsllint.glslifyAutoOpenOnError": {
-          "type": "boolean",
-          "default": true,
-          "description": "Opens the glslified code when there is a linting error"
-        },
-        "glsllint.glslifyOptions": {
-          "type": "object",
-          "default": {},
-          "description": "Specify glslify options used in glslify.compile if basedir is not set then the workspace root path is used"
-        },
-        "glsllint.glslifyUseCurrentFileAsBasedir": {
-          "type": "boolean",
-          "default": false,
-          "description": "Use the current file as the basedir for glslify"
-        },
-        "glsllint.additionalStageAssociations": {
-          "type": "object",
-          "default": {},
-          "description": "Add another extension -> stage mapping (e.g.: \".vert\": \"vert\""
-        },
-        "glsllint.fallBackStage": {
-          "type": "string",
-          "default": "",
-          "description": "Fallback stage for when the shader stage could not be decuted"
-        },
-        "glsllint.supportedLangsWithStringLiterals": {
-          "type": "array",
-          "default": [
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-            "elm"
-          ],
-          "description": "VSCode language id's to support for string literal validation"
-        },
-        "glsllint.languageSettings": {
-          "type": "object",
-          "description": "Language specific settings",
-          "default": {
-            "javascript": {
-              "parser": "TSAST"
-            },
-            "javascriptreact": {
-              "parser": "TSAST"
-            },
-            "typescript": {
-              "parser": "TSAST"
-            },
-            "typescriptreact": {
-              "parser": "TSAST"
-            },
-            "elm": {
-              "parser": "REGEX",
-              "patternStart": "\\[glsl",
-              "patternEnd": "\\|\\]"
-            }
-          }
-        },
-        "glsllint.linkShader": {
-          "type": "boolean",
-          "default": true,
-          "description": "Link all input files together to form a single module ('-l' option for glslangValidator, used for includes)"
-        },
-        "glsllint.useIncludeDirOfFile": {
-          "type": "boolean",
-          "default": true,
-          "description": "Add -I[DIR_OF_FILE] to the glslangValidator command"
-        }
-      }
-    }
-  },
-  "scripts": {
-    "package": "vsce package",
-    "vscode:prepublish": "webpack --config ./webpack.config.ts --mode production",
-    "webpack": "webpack --config ./webpack.config.ts --mode development",
-    "webpack-dev": "webpack --config ./webpack.config.ts --mode development --watch",
-    "test-compile": "tsc -p ./",
-    "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.23",
-    "@types/vscode": "1.38.0",
-    "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^5.17.0",
-    "@typescript-eslint/parser": "^5.17.0",
-    "@typescript-eslint/typescript-estree": "^5.17.0",
-    "eslint": "^8.12.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.6.1",
-    "ts-loader": "^9.2.8",
-    "ts-node": "^10.7.0",
-    "vsce": "^2.7.0",
-    "vscode-test": "^1.6.1",
-    "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2"
-  },
-  "dependencies": {
-    "glslify": "^7.1.1",
-    "typescript": "^4.6.3"
-  }
+	"name": "vscode-glsllint",
+	"version": "1.8.1",
+	"publisher": "dtoplak",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hsimpson/vscode-glsllint.git"
+	},
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"license": "MIT",
+	"displayName": "GLSL Lint",
+	"description": "Linting of GLSL shader code",
+	"categories": [
+		"Programming Languages",
+		"Linters"
+	],
+	"keywords": [
+		"GLSL",
+		"Shader",
+		"Fragment shader",
+		"OpenGL",
+		"WebGL",
+		"OpenGL Shading Language",
+		"Vulkan"
+	],
+	"icon": "icon.png",
+	"extensionDependencies": [
+		"slevesque.shader"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./dist/extension",
+	"contributes": {
+		"languages": [
+			{
+				"id": "glsl",
+				"aliases": [
+					"GLSL"
+				],
+				"extensions": [
+					".vert",
+					".tesc",
+					".tese",
+					".geom",
+					".frag",
+					".comp",
+					".rgen",
+					".rint",
+					".rahit",
+					".rchit",
+					".rmiss",
+					".rcall",
+					".mesh",
+					".task"
+				]
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "GLSL Lint",
+			"properties": {
+				"glsllint.glslangValidatorPath": {
+					"scope": "machine",
+					"type": "string",
+					"default": "",
+					"description": "The path to the glslangValidator executable"
+				},
+				"glsllint.glslangValidatorArgs": {
+					"type": [
+						"string",
+						"object"
+					],
+					"default": "",
+					"description": "Arguments for the glslangValidator executable"
+				},
+				"glsllint.glslifyPattern": {
+					"type": "string",
+					"default": "#pragma glslify:",
+					"description": "Regex pattern for glslify pragma"
+				},
+				"glsllint.glslifyAutoOpenOnError": {
+					"type": "boolean",
+					"default": true,
+					"description": "Opens the glslified code when there is a linting error"
+				},
+				"glsllint.glslifyOptions": {
+					"type": "object",
+					"default": {},
+					"description": "Specify glslify options used in glslify.compile if basedir is not set then the workspace root path is used"
+				},
+				"glsllint.glslifyUseCurrentFileAsBasedir": {
+					"type": "boolean",
+					"default": false,
+					"description": "Use the current file as the basedir for glslify"
+				},
+				"glsllint.additionalStageAssociations": {
+					"type": "object",
+					"default": {},
+					"description": "Add another extension -> stage mapping (e.g.: \".vert\": \"vert\""
+				},
+				"glsllint.fallBackStage": {
+					"type": "string",
+					"default": "",
+					"description": "Fallback stage for when the shader stage could not be decuted"
+				},
+				"glsllint.supportedLangsWithStringLiterals": {
+					"type": "array",
+					"default": [
+						"javascript",
+						"javascriptreact",
+						"typescript",
+						"typescriptreact",
+						"elm"
+					],
+					"description": "VSCode language id's to support for string literal validation"
+				},
+				"glsllint.languageSettings": {
+					"type": "object",
+					"description": "Language specific settings",
+					"default": {
+						"javascript": {
+							"parser": "TSAST"
+						},
+						"javascriptreact": {
+							"parser": "TSAST"
+						},
+						"typescript": {
+							"parser": "TSAST"
+						},
+						"typescriptreact": {
+							"parser": "TSAST"
+						},
+						"elm": {
+							"parser": "REGEX",
+							"patternStart": "\\[glsl",
+							"patternEnd": "\\|\\]"
+						}
+					}
+				},
+				"glsllint.linkShader": {
+					"type": "boolean",
+					"default": true,
+					"description": "Link all input files together to form a single module ('-l' option for glslangValidator, used for includes)"
+				},
+				"glsllint.useIncludeDirOfFile": {
+					"type": "boolean",
+					"default": true,
+					"description": "Add -I[DIR_OF_FILE] to the glslangValidator command"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"package": "vsce package",
+		"vscode:prepublish": "webpack --config ./webpack.config.ts --mode production",
+		"webpack": "webpack --config ./webpack.config.ts --mode development",
+		"webpack-dev": "webpack --config ./webpack.config.ts --mode development --watch",
+		"test-compile": "tsc -p ./",
+		"test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.23",
+		"@types/vscode": "1.38.0",
+		"@types/webpack": "^5.28.0",
+		"@typescript-eslint/eslint-plugin": "^5.17.0",
+		"@typescript-eslint/parser": "^5.17.0",
+		"@typescript-eslint/typescript-estree": "^5.17.0",
+		"eslint": "^8.12.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"prettier": "^2.6.1",
+		"ts-loader": "^9.2.8",
+		"ts-node": "^10.7.0",
+		"vsce": "^2.7.0",
+		"vscode-test": "^1.6.1",
+		"webpack": "^5.70.0",
+		"webpack-cli": "^4.9.2"
+	},
+	"dependencies": {
+		"@vscode/test-electron": "^2.2.1",
+		"@vscode/vsce": "^2.15.0",
+		"balanced-match": "^2.0.0",
+		"glslify": "^7.1.1",
+		"typescript": "^4.6.3"
+	},
+	"__metadata": {
+		"id": "3718a7c9-0ac8-46dd-81b5-8bc53de038af",
+		"publisherDisplayName": "DanielToplak",
+		"publisherId": "393aa94a-7f10-45b5-907a-762b06e52364",
+		"isPreReleaseVersion": false
+	}
 }
