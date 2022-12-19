@@ -545,10 +545,7 @@ export class GLSLLintingProvider {
                   const message = matches[4];
 
                   // TODO: correctly file path handling
-                  const ps = filename.trim();
-                  const pi = fileName.trim();
-                  console.log(ps);
-                  console.log(pi);
+                  const ps = filename.trim(), pi = fileName.trim();
                   if (filename.endsWith("stdin") && !path.extname(ps) || ps.includes(pi) || pi.includes(ps)) {
                     const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
                     const diagnostic = new vscode.Diagnostic(range, message, severity);
