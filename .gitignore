@@ -2,4 +2,4 @@ dist
 node_modules
 test/test_shaders/restricted/
 *.vsix
-
+package-lock.json
