@@ -4,6 +4,17 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.9.x]
+
+### Added
+
+- Some new features are still experimental.
+- Added more option for `"glsllint.glslangValidatorArgs"`, a new option has been added, with the ability to specify arguments for each file or extension.
+- Added headers support by using input file as basis. 
+- Added ability to specify output (`-o`) for automatic shader building and compilation. Sometimes can be useful when debugging code without precompiling the whole code. 
+- Errors, warnings, or info in the code are now filtered by path (for headers). 
+- These functions are pre-tested in practice.
+
 ## [1.8.x]
 
 ### Added

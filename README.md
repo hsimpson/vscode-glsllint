@@ -36,6 +36,19 @@ All settings are prefixed with `glsllint.`
 | `glslifyOptions.basedir`           | `""`                                                                         | Specify the base directory for glslify.compile()                                                             |
 | `glslifyUseCurrentFileAsBasedir`   | `false`                                                                      | Use the current file as the base directory for glslify (only if `glslifyOptions.basedir` is not set)         |
 
+### glslangValidatorArgs per file or extension
+
+This feature is still experimental. Since version 1.9, you can specify arguments for each file or extension individually. Also on this basis, support for header code based on the main base has been added. 
+
+```json
+{
+    "glsllint.glslangValidatorArgs": {
+        ".glsl": "--client vulkan100 --target-env spirv1.6 dummy.comp",
+        "*": "--client vulkan100 --target-env spirv1.6"
+    }
+}
+```
+
 ### additionalStageAssociations example
 
 ```json
