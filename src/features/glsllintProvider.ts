@@ -448,7 +448,8 @@ export class GLSLLintingProvider {
       const lastname = (args[args.length-1]||"");
       if (path.extname(lastname.trim()).startsWith(".") && 
         !lastname.includes("vulkan1") &&
-        !lastname.includes("spirv1")
+        !lastname.includes("spirv1") &&
+        !path.extname(lastname).includes(".spv")
       ) {
         basis = vscode.workspace.asRelativePath(args.pop());
       }
@@ -470,7 +471,7 @@ export class GLSLLintingProvider {
       }
 
       const tempFile = path.join(os.tmpdir(), `vscode-glsllint-${stage}.tmp`);
-      if (this.willCreateSPIRVBinary(args)) {
+      if (this.willCreateSPIRVBinary(args) && !args.find((s)=>(s.trim()=="-o"))) {
         args.push('-o');
         args.push(tempFile);
       }
