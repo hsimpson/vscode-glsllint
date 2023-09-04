@@ -32,7 +32,7 @@ function bar(param) {
   const another_shader = `
     #version 460 core
 
-    #pragma vscode_glsllint_stage : frag
+    #pragma vscode_glsllint_stage: frag
 
     out vec4 FragColor;
 
