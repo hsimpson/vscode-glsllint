@@ -242,7 +242,7 @@ export class GLSLLintingProvider {
   }
 
   private getShaderLiterals(literals: StringLiteral[]): StringLiteral[] {
-    const isShaderRegex = /main\s*\(.*\)\s*\{/gm;
+    const isShaderRegex = /main(.*|\s)\((.*|\s)\)/gm;
 
     const shaderLiterals = literals.filter((literal) => {
       // check if this literal is a shader
