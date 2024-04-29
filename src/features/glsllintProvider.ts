@@ -5,9 +5,9 @@ import * as os from 'os';
 import * as path from 'path';
 import * as ts from 'typescript';
 import * as vscode from 'vscode';
+import { stageExpressions } from './glslStageExpression';
 import { GLSLifyProvider } from './glslifyProvider';
 import { GLSLifyUriMapper } from './glslifyUriMapper';
-import { stageExpressions } from './glslStageExpression';
 
 enum glslValidatorFailCodes {
   ESuccess = 0,
@@ -435,7 +435,13 @@ export class GLSLLintingProvider {
       const diagnostics: vscode.Diagnostic[] = [];
 
       // Split the arguments string from the settings
-      const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+      const args: string[] = [];
+      if (Array.isArray(this.config.glslangValidatorArgs)) {
+        args.push(...this.config.glslangValidatorArgs);
+      } else {
+        const splitArgs = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+        args.push(...splitArgs);
+      }
 
       if (this.config.linkShader) {
         args.push('-l');
