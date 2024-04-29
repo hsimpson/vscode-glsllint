@@ -2,6 +2,8 @@ name: makevsix
 
 on:
   push:
+    tags:
+      - '*'
 
 jobs:
   cicd:
