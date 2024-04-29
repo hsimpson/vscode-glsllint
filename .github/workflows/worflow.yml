@@ -2,8 +2,6 @@ name: makevsix
 
 on:
   push:
-    tags:
-      - '*'
 
 jobs:
   cicd:
@@ -11,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '16.x'
 
@@ -35,7 +33,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.package_version.outputs.current-version }}
+          release_name: Release ${{ steps.package_version.outputs.current-version }}-${{ github.ref }}
           draft: false
           prerelease: false
 
