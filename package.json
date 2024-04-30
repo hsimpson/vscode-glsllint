@@ -1,6 +1,6 @@
 {
   "name": "vscode-glsllint",
-  "version": "1.9.0-testing.0",
+  "version": "1.9.0-testing.1",
   "publisher": "dtoplak",
   "repository": {
     "type": "git",
@@ -69,8 +69,11 @@
           "description": "The path to the glslangValidator executable"
         },
         "glsllint.glslangValidatorArgs": {
-          "type": "string",
-          "default": "",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
           "description": "Arguments for the glslangValidator executable"
         },
         "glsllint.glslifyPattern": {
