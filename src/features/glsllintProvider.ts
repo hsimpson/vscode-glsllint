@@ -5,9 +5,9 @@ import * as os from 'os';
 import * as path from 'path';
 import * as ts from 'typescript';
 import * as vscode from 'vscode';
+import { stageExpressions } from './glslStageExpression';
 import { GLSLifyProvider } from './glslifyProvider';
 import { GLSLifyUriMapper } from './glslifyUriMapper';
-import { stageExpressions } from './glslStageExpression';
 
 enum glslValidatorFailCodes {
   ESuccess = 0,
@@ -57,7 +57,7 @@ export class GLSLLintingProvider {
         this.diagnosticCollection.delete(textDocument.uri);
       },
       null,
-      subscriptions
+      subscriptions,
     );
 
     vscode.workspace.onDidSaveTextDocument(this.doLint, this);
@@ -115,7 +115,7 @@ export class GLSLLintingProvider {
           default:
             this.showMessage(
               `GLSL Lint: Resolving via '${variable}' is not supported, only 'env:YOUR_ENV_VARIABLE' is supported.`,
-              MessageSeverity.Error
+              MessageSeverity.Error,
             );
             break;
         }
@@ -307,7 +307,7 @@ export class GLSLLintingProvider {
     } else {
       this.showMessage(
         `glsllint.languageSettings.${textDocument.languageId}.parser (${languageSettings.parser}) is not valid`,
-        MessageSeverity.Error
+        MessageSeverity.Error,
       );
     }
 
@@ -379,7 +379,7 @@ export class GLSLLintingProvider {
                 literalDiagnostic.range.start.line + literal.startLine,
                 0,
                 literalDiagnostic.range.end.line + literal.startLine,
-                0
+                0,
               );
             }
 
@@ -435,7 +435,22 @@ export class GLSLLintingProvider {
       const diagnostics: vscode.Diagnostic[] = [];
 
       // Split the arguments string from the settings
-      const args = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+      const args: string[] = [];
+      if (Array.isArray(this.config.glslangValidatorArgs)) {
+        args.push(...this.config.glslangValidatorArgs);
+      } else {
+        const splitArgs = this.config.glslangValidatorArgs.split(/\s+/).filter((arg) => arg);
+        const arrayMessage = splitArgs.map((arg) => `  "${arg}",`).join('\n');
+        this.showMessage(
+          `GLSL Lint: the setting 'glsllint.glslangValidatorArgs' as string is deprecated! Please use the array form:
+          [
+            ${arrayMessage}
+          ]
+            `,
+          MessageSeverity.Warning,
+        );
+        args.push(...splitArgs);
+      }
 
       if (this.config.linkShader) {
         args.push('-l');
@@ -448,7 +463,7 @@ export class GLSLLintingProvider {
       if (!stage) {
         this.showMessage(
           `GLSL Lint: failed to detect shader stage, you can add it's extension setting 'glsllint.additionalStageAssociations' or configure a fallback stage with 'glsllint.fallBackStage'`,
-          MessageSeverity.Error
+          MessageSeverity.Error,
         );
       }
 
