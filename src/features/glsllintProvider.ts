@@ -526,13 +526,27 @@ export class GLSLLintingProvider {
               }
 
               if (severity !== undefined) {
-                const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
-                if (matches && matches.length === 5) {
-                  const errorline = parseInt(matches[3]);
-                  const message = matches[4];
-                  const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
-                  const diagnostic = new vscode.Diagnostic(range, message, severity);
-                  diagnostics.push(diagnostic);
+                /* If arguments include the new --error-column change the regex */
+                if (args.includes('--error-column')) {
+                  const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):(\d+):\s+(.*)/);
+                  if (matches && matches.length === 6) {
+                    const errorline = parseInt(matches[3]);
+                    const errorcolumn = parseInt(matches[4]);
+                    const message = matches[5];
+                    const range = new vscode.Range(errorline - 1, errorcolumn, errorline - 1, errorcolumn);
+                    const diagnostic = new vscode.Diagnostic(range, message, severity);
+                    diagnostics.push(diagnostic);
+                  }
+                } else {
+                  /* The previous case without error-column */
+                  const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
+                  if (matches && matches.length === 5) {
+                    const errorline = parseInt(matches[3]);
+                    const message = matches[4];
+                    const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                    const diagnostic = new vscode.Diagnostic(range, message, severity);
+                    diagnostics.push(diagnostic);
+                  }
                 }
               }
             }
