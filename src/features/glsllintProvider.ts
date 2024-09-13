@@ -528,7 +528,7 @@ export class GLSLLintingProvider {
               if (severity !== undefined) {
                 const matches = line.match(/(WARNING|ERROR):\s+([^:]+):(\d+)(?::(\d+))?:\s+(.*)/);
                 let errorcolumn = 0;
-                if (matches && matches.length == 6) {
+                if (matches && matches.length === 6) {
                   if (matches[4] !== null) {
                     errorcolumn = parseInt(matches[4]);
                   }
