@@ -33,7 +33,8 @@
   },
   "files.exclude": {
     "dist": true,
-    "node_modules": true
+    "node_modules": true,
+    "out": true
   },
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

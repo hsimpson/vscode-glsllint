@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 export class GLSLifyUriMapper {
   private static _instance: GLSLifyUriMapper;
-  private _map: Map<string, string>;
+  private readonly _map: Map<string, string>;
 
   private constructor() {
     this._map = new Map<string, string>();

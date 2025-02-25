@@ -1,7 +1,7 @@
 dist
 node_modules
+out
 test/test_shaders/restricted/
 *.vsix
-
 
 .DS_Store

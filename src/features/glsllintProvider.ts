@@ -298,17 +298,16 @@ export class GLSLLintingProvider {
     }
 
     const fileContent = textDocument.getText();
+    const parser = languageSettings.parser;
 
-    if (languageSettings.parser === 'TSAST') {
+    if (parser === 'TSAST') {
       const sourceFile = ts.createSourceFile(textDocument.fileName, fileContent, ts.ScriptTarget.ES2015);
       stringLiterals = this.getStringLiteralsTSAST(sourceFile, stringLiterals, sourceFile);
-    } else if (languageSettings.parser === 'REGEX') {
+    } else if (parser === 'REGEX') {
       stringLiterals = this.getShaderStageFromFileREGEX(fileContent, languageSettings);
     } else {
-      this.showMessage(
-        `glsllint.languageSettings.${textDocument.languageId}.parser (${languageSettings.parser}) is not valid`,
-        MessageSeverity.Error,
-      );
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      this.showMessage(`glsllint.languageSettings.${textDocument.languageId}.parser (${parser}) is not valid`, MessageSeverity.Error);
     }
 
     stringLiterals = this.getShaderLiterals(stringLiterals);

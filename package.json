@@ -159,28 +159,30 @@
     "webpack": "webpack --config ./webpack.config.ts --mode development",
     "webpack-dev": "webpack --config ./webpack.config.ts --mode development --watch",
     "test-compile": "tsc -p ./",
-    "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test"
+    "test": "webpack --config ./webpack.config.ts --mode production && node ./node_modules/vscode/bin/test",
+    "check-types": "tsc --noemit",
+    "lint:ts": "eslint . --fix",
+    "lint": "yarn check-types && yarn lint:ts",
+    "prettier": "prettier --write ."
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.13.5",
     "@types/vscode": "1.38.0",
     "@types/webpack": "^5.28.5",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
-    "@typescript-eslint/typescript-estree": "^7.7.1",
-    "eslint": "^9.1.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "prettier": "^3.2.5",
-    "ts-loader": "^9.5.1",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "prettier": "^3.5.2",
+    "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "typescript-eslint": "^8.25.0",
     "vsce": "^2.15.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4"
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "glslify": "^7.1.1",
-    "typescript": "^4.6.3"
+    "typescript": "^5.7.3"
   }
 }
