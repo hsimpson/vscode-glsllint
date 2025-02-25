@@ -526,11 +526,15 @@ export class GLSLLintingProvider {
               }
 
               if (severity !== undefined) {
-                const matches = line.match(/(WARNING|ERROR):\s+(\d|.*):(\d+):\s+(.*)/);
-                if (matches && matches.length === 5) {
+                const matches = line.match(/(WARNING|ERROR):\s+([^:]+):(\d+)(?::(\d+))?:\s+(.*)/);
+                let errorcolumn = 0;
+                if (matches && matches.length === 6) {
+                  if (matches[4] !== null) {
+                    errorcolumn = parseInt(matches[4]);
+                  }
                   const errorline = parseInt(matches[3]);
-                  const message = matches[4];
-                  const range = new vscode.Range(errorline - 1, 0, errorline - 1, 0);
+                  const message = matches[5];
+                  const range = new vscode.Range(errorline - 1, errorcolumn, errorline - 1, errorcolumn);
                   const diagnostic = new vscode.Diagnostic(range, message, severity);
                   diagnostics.push(diagnostic);
                 }
