@@ -3,3 +3,5 @@ node_modules
 test/test_shaders/restricted/
 *.vsix
 
+
+.DS_Store
