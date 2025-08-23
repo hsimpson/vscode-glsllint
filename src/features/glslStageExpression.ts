@@ -10,7 +10,7 @@ export const stageExpressions: StageExpression[] = [
    * - GLSL <= 1.20
    * - GLSL ES <= 1.00
    */
-  { stage: 'frag', expression: /gl_FragColor\s*=|gl_FragDepth\s*=|gl_FragData\s*\[.*\]\s*=/gm } // for a fragment shader
+  { stage: 'frag', expression: /gl_FragColor\s*=|gl_FragDepth\s*=|gl_FragData\s*\[.*\]\s*=/gm }, // for a fragment shader
   /*
   { stage: 'geom', expression: / /gm }, // for a geometry shader
   { stage: 'comp', expression: / /gm }, // for a compute shader

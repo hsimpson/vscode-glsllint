@@ -10,7 +10,7 @@ import { GLSLifyProvider } from './features/glslifyProvider';
 export function activate(context: vscode.ExtensionContext): void {
   const glslifyProvider = new GLSLifyProvider();
   const providerRegistrations = vscode.Disposable.from(
-    vscode.workspace.registerTextDocumentContentProvider(GLSLifyProvider.scheme, glslifyProvider)
+    vscode.workspace.registerTextDocumentContentProvider(GLSLifyProvider.scheme, glslifyProvider),
   );
 
   const linter = new GLSLLintingProvider();

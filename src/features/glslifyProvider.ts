@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import { GLSLifyUriMapper } from './glslifyUriMapper';
 
 export class GLSLifyProvider implements vscode.TextDocumentContentProvider {
-  private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
-  public static scheme = 'glslif';
+  private readonly _onDidChange = new vscode.EventEmitter<vscode.Uri>();
+  public static readonly scheme = 'glslif';
 
   public dispose(): void {
     this._onDidChange.dispose();

@@ -1,0 +1,5 @@
+dist/
+out/
+test/
+package.json
+ackage-lock.json
