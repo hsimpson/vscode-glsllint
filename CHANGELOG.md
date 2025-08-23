@@ -4,6 +4,12 @@ All notable changes to the "vscode-glsllint" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.9.1]
+
+### Added
+
+- Since https://github.com/KhronosGroup/glslang/pull/3614, glslangValidator now outputs the error column as well. If `--error-column` is given among `glslangValidatorArgs`, then glsllint will display glsl errors under the correct column, not just at the start of the line
+
 ## [1.9.x]
 
 ### Added
