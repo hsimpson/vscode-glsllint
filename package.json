@@ -166,23 +166,23 @@
     "prettier": "prettier --write ."
   },
   "devDependencies": {
-    "@types/node": "^22.13.5",
+    "@types/node": "^24.3.0",
     "@types/vscode": "1.38.0",
     "@types/webpack": "^5.28.5",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
-    "prettier": "^3.5.2",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "typescript-eslint": "^8.25.0",
+    "typescript-eslint": "^8.40.0",
     "vsce": "^2.15.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.98.0",
+    "webpack": "^5.101.3",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "glslify": "^7.1.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.2"
   }
 }
