@@ -29,23 +29,7 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@main
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.package_version.outputs.current-version }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./vscode-glsllint-${{ steps.package_version.outputs.current-version }}.vsix
-          asset_name: vscode-glsllint-${{ steps.package_version.outputs.current-version }}.vsix
-          asset_content_type: application/zip
+          name: Release ${{ steps.package_version.outputs.current-version }}
+          files: ./vscode-glsllint-${{ steps.package_version.outputs.current-version }}.vsix
