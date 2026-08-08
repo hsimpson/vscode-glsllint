@@ -8,7 +8,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- `glslangValidator` outputs to stderr
+- `glslangValidator` outputs to stderr [#97](https://github.com/hsimpson/vscode-glsllint/issues/97)
+- update dependencies
 
 ## [1.9.x]
 
@@ -20,7 +21,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- Detection of shaders in string literals does not work with some strings [#68](https://github.com/hsimpson/vscode-glsllint/issues/68)
+- Detection of shaders in string literals does not work with some strings [#](https://github.com/hsimpson/vscode-glsllint/issues/68)
 
 ## [1.8.x]
 

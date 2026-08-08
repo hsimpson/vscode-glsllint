@@ -1,15 +1,24 @@
 {
+  "files.associations": {
+    "*.swsl": "glsl"
+  },
+  "glsllint.additionalStageAssociations": {
+    ".swsl": "frag"
+  },
+  
   "workbench.settings.editor": "ui",
+
   // "glsllint.additionalStageAssociations": {
   //   ".fragment.fx": "frag",
-  //   ".vertex.fx": "vert"
+  //   ".vertex.fx": "vert",
+  //   ".swsl": "frag"
   // },
   // "glsllint.glslifyAutoOpenOnError": true,
   // "glsllint.glslifyOptions": {
   // "basedir": "G:\\src\\vscodeextensions\\vscode-glsllint\\test\\test_shaders\\GLSLIFY\\chunks"
   // },
   // "glsllint.glslangValidatorArgs": ["--target-env", "vulkan1.1"]
-  "glsllint.glslangValidatorArgs": ["-V"]
+  // "glsllint.glslangValidatorArgs": ["-V"]
   // "glsllint.glslangValidatorArgs": ["--P", "#extension GL_GOOGLE_include_directive: enable", "-V"]
   // "glsllint.glslifyUseCurrentFileAsBasedir": true,
   // "glsllint.linkShader": false,
