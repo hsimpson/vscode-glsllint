@@ -178,8 +178,8 @@
     "typescript-eslint": "^8.65.0",
     "vsce": "^2.15.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.109.2",
-    "webpack-cli": "^7.2.2"
+    "webpack": "^5.104.1",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "glslify": "^7.1.1",
