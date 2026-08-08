@@ -512,7 +512,7 @@ export class GLSLLintingProvider {
           `;
           this.showMessage(message, MessageSeverity.Error);
         } else if (exitCode !== glslValidatorFailCodes.ESuccess) {
-          const lines = stdOutData.toString().split(/(?:\r\n|\r|\n)/g);
+          const lines = stdErrorData.toString().split(/(?:\r\n|\r|\n)/g);
           for (const line of lines) {
             if (line !== '' && line !== 'stdin') {
               let severity: vscode.DiagnosticSeverity = undefined;
