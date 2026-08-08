@@ -178,7 +178,7 @@
     "typescript-eslint": "^8.40.0",
     "vsce": "^2.15.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.101.3",
+    "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
